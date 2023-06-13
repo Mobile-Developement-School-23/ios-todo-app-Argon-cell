@@ -3,28 +3,36 @@ import Foundation
 //MARK: - Class
 
 final class FileCache {
-    private(set) var todoItems: [TodoItem]
+    private(set) var todoItems: [String: TodoItem]
     
-    init(todoItems: [TodoItem]) {
+    init(todoItems: [String: TodoItem]) {
         self.todoItems = todoItems
     }
     
     convenience init() {
-        self.init(todoItems: [])
+        self.init(todoItems: [:])
     }
     
     func add(_ item: TodoItem) {
-        if todoItems.filter({ $0.id == item.id }).count == 0 {
-            todoItems.append(item)
+        if todoItems[item.id] != nil {
+            return
+        } else {
+            todoItems[item.id] = item
         }
     }
     
     func remove(with id: String) -> TodoItem? {
-        for (index, todoItem) in todoItems.enumerated() {
-            todoItems.remove(at: index)
-            return todoItem
+        if let itemIntList = todoItems[id] {
+            todoItems[id] = nil
+            return itemIntList
+        } else {
+            return nil
         }
-        return nil
+//        for (index, todoItem) in todoItems.enumerated() {
+//            todoItems.remove(at: index)
+//            return todoItem
+//        }
+//        return nil
     }
     
     func loadFromJSON(file name: String) throws {
@@ -43,7 +51,7 @@ final class FileCache {
     }
     
     func saveToJSON(file name: String) throws {
-        let todoJsonItems = todoItems.map( { $0.json } )
+        let todoJsonItems = todoItems.map( { $1.json } )
         
         guard let data = try? JSONSerialization.data(withJSONObject: todoJsonItems) else { throw FileCacheErrors.JSONConvertationError }
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileCacheErrors.DirectoryNotFound }
@@ -81,7 +89,7 @@ extension FileCache {
     func saveToCSV(file name: String) throws {
         var dataToSave: Array<String> = ["id;text;importance;deadline;is_done;date_creation;date_changing"]
         
-        for todoCSVItem in todoItems.map( { $0.csv } ) {
+        for todoCSVItem in todoItems.map( { $1.csv } ) {
             dataToSave.append(todoCSVItem)
         }
 

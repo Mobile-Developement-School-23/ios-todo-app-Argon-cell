@@ -14,11 +14,7 @@ final class FileCache {
     }
     
     func add(_ item: TodoItem) {
-        if todoItems[item.id] != nil {
-            return
-        } else {
-            todoItems[item.id] = item
-        }
+        todoItems[item.id] = item
     }
     
     func remove(with id: String) -> TodoItem? {
@@ -28,11 +24,6 @@ final class FileCache {
         } else {
             return nil
         }
-//        for (index, todoItem) in todoItems.enumerated() {
-//            todoItems.remove(at: index)
-//            return todoItem
-//        }
-//        return nil
     }
     
     func loadFromJSON(file name: String) throws {
@@ -54,6 +45,7 @@ final class FileCache {
         let todoJsonItems = todoItems.map( { $1.json } )
         
         guard let data = try? JSONSerialization.data(withJSONObject: todoJsonItems) else { throw FileCacheErrors.JSONConvertationError }
+
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileCacheErrors.DirectoryNotFound }
         
         let pathWithFileName = documentDirectory.appendingPathComponent(name + ".json")
@@ -67,7 +59,6 @@ final class FileCache {
     
     
 }
-
 
 extension FileCache {
     func loadFromCSV(file name: String) throws {

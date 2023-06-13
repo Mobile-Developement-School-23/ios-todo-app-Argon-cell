@@ -5,17 +5,20 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //MARK: - Проверка FileCache
-        let fileCache = FileCache()
-        try? fileCache.loadFromCSV(file: "file")
-        try? fileCache.loadFromJSON(file: "file_2")
+        //MARK: - Проверка FileCache, для себя
+        
+//        let fileCache = FileCache()
+//        try? fileCache.loadFromCSV(file: "file")
+//        try? fileCache.loadFromJSON(file: "file_2")
 //        fileCache.add(TodoItem(text: "новая задача №1", importance: .important, deadline: nil, isDone: false, dateChanging: nil))
 //        fileCache.add(TodoItem(text: "новая задача №2", importance: .important, deadline: nil, isDone: false, dateChanging: nil))
 //        fileCache.add(TodoItem(text: "новая задача №3", importance: .important, deadline: nil, isDone: false, dateChanging: nil))
-        try? fileCache.saveToCSV(file: "file")
+//        try? fileCache.saveToCSV(file: "file")
+//
+//        print(fileCache.todoItems)
+//        print(getDocumentsDirectory())
+//        try? fileCache.saveToJSON(file: "file_2")
         
-        print(fileCache.todoItems)
-        print(getDocumentsDirectory())
     }
     
     

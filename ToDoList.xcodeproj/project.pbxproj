@@ -106,7 +106,6 @@
 				7840C2562A33B6CC00EEA3AF /* Models */,
 				7840C25E2A33D44E00EEA3AF /* ViewControllers */,
 				7840C25F2A33D4FB00EEA3AF /* Services */,
-				7840C2572A33B6DB00EEA3AF /* Extensions */,
 				7840C2552A33B67100EEA3AF /* SupportingFiles */,
 				7840C2542A33B66100EEA3AF /* Application */,
 			);
@@ -155,13 +154,6 @@
 				7840C2582A33B6FF00EEA3AF /* TodoItem.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		7840C2572A33B6DB00EEA3AF /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 		7840C25E2A33D44E00EEA3AF /* ViewControllers */ = {

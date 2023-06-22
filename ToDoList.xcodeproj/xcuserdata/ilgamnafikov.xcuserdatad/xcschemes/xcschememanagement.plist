@@ -6,8 +6,23 @@
 	<dict>
 		<key>ToDoList.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>7840C2202A33B4EC00EEA3AF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7840C2362A33B4ED00EEA3AF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

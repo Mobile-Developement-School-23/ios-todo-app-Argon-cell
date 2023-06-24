@@ -129,7 +129,7 @@ final class TodoItemViewController: UIViewController {
 
         datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.calendar.firstWeekday = 2
-        datePicker.minimumDate = Date.getNextDayDate()
+        datePicker.minimumDate = Date()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
 

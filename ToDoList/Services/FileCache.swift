@@ -4,11 +4,11 @@ import Foundation
 
 final class FileCache {
     private(set) var todoItems: [String: TodoItem] = [:]
-        
+
     func add(_ item: TodoItem) {
         todoItems[item.id] = item
     }
-    
+
     func remove(with id: String) -> TodoItem? {
         if let itemIntList = todoItems[id] {
             todoItems[id] = nil
@@ -24,27 +24,28 @@ final class FileCache {
 extension FileCache {
     func loadFromJSON(file name: String) throws {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileCacheErrors.DirectoryNotFound }
-        
+
         let pathWithFileName = documentDirectory.appendingPathComponent(name + FileFormat.json.rawValue)
+
         guard let data = try? Data(contentsOf: pathWithFileName) else { throw FileCacheErrors.PathToFileNotFound }
         guard let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [Any] else { throw FileCacheErrors.JSONConvertationError }
-        
+
         for jsonItem in jsonObject {
             if let parsedItem = TodoItem.parse(json: jsonItem) {
                 add(parsedItem)
             }
         }
     }
-    
+
     func saveToJSON(file name: String) throws {
         let todoJsonItems = todoItems.map { $1.json }
-        
+
         guard let data = try? JSONSerialization.data(withJSONObject: todoJsonItems) else { throw FileCacheErrors.JSONConvertationError }
 
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileCacheErrors.DirectoryNotFound }
-        
+
         let pathWithFileName = documentDirectory.appendingPathComponent(name + FileFormat.json.rawValue)
-        
+
         do {
             try data.write(to: pathWithFileName)
         } catch {
@@ -57,9 +58,9 @@ extension FileCache {
     func loadFromCSV(file name: String) throws {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileCacheErrors.DirectoryNotFound }
         let pathWithFileName = documentDirectory.appendingPathComponent(name + FileFormat.csv.rawValue)
-        
+
         guard let data = try? String(contentsOf: pathWithFileName, encoding: .utf8) else { throw FileCacheErrors.PathToFileNotFound }
-        
+
         var rows = data.description.components(separatedBy: csvLineSeparator)
         rows.removeFirst()
 
@@ -69,10 +70,10 @@ extension FileCache {
             }
         }
     }
-    
+
     func saveToCSV(file name: String) throws {
         var dataToSave = [csvHeaderFormat]
-        
+
         for todoCSVItem in todoItems.map({ $1.csv }) {
             dataToSave.append(todoCSVItem)
         }
@@ -92,11 +93,11 @@ extension FileCache {
 
 // MARK: - Enums
 
-enum FileCacheErrors: Error {
-    case DirectoryNotFound
-    case JSONConvertationError
-    case PathToFileNotFound
-    case WriteFileError
+enum FileCacheErrors: String, Error {
+    case DirectoryNotFound = "Директория файла не найдена, попробуйте поменять в fileCache папки"
+    case JSONConvertationError = "Ошибка с конвертацией JSON файла"
+    case PathToFileNotFound = "Путь до файла не найден, проверьте конечный путь"
+    case WriteFileError = "Ошибка при записи файла"
 }
 
 private enum FileFormat: String {

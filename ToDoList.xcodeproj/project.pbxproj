@@ -7,10 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		782D5AC52A467DFF00777655 /* TodoItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5AC42A467DFF00777655 /* TodoItemViewController.swift */; };
+		782D5ACD2A467E6E00777655 /* BodyLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5AC92A467E6E00777655 /* BodyLabelView.swift */; };
+		782D5ACE2A467E6E00777655 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ACA2A467E6E00777655 /* TextView.swift */; };
+		782D5ACF2A467E6E00777655 /* ColorWheelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ACB2A467E6E00777655 /* ColorWheelPickerView.swift */; };
+		782D5AD02A467E6E00777655 /* SeparatorLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ACC2A467E6E00777655 /* SeparatorLineView.swift */; };
+		782D5AD62A467EDB00777655 /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 782D5AD22A467EDB00777655 /* SF-Pro-Display-Bold.otf */; };
+		782D5AD72A467EDB00777655 /* SF-Pro-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 782D5AD32A467EDB00777655 /* SF-Pro-Display-Semibold.otf */; };
+		782D5AD82A467EDB00777655 /* SF-ProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 782D5AD42A467EDB00777655 /* SF-ProText-Regular.ttf */; };
+		782D5AD92A467EDB00777655 /* SF-ProText-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 782D5AD52A467EDB00777655 /* SF-ProText-Semibold.ttf */; };
+		782D5AE02A467F3E00777655 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ADB2A467F3E00777655 /* Date.swift */; };
+		782D5AE12A467F3E00777655 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ADC2A467F3E00777655 /* UIColor.swift */; };
+		782D5AE22A467F3E00777655 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ADD2A467F3E00777655 /* UIImage.swift */; };
+		782D5AE32A467F3E00777655 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ADE2A467F3E00777655 /* UIViewController.swift */; };
+		782D5AE42A467F3E00777655 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ADF2A467F3E00777655 /* UIFont.swift */; };
 		7840C2252A33B4EC00EEA3AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840C2242A33B4EC00EEA3AF /* AppDelegate.swift */; };
 		7840C2272A33B4EC00EEA3AF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840C2262A33B4EC00EEA3AF /* SceneDelegate.swift */; };
-		7840C2292A33B4EC00EEA3AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840C2282A33B4EC00EEA3AF /* ViewController.swift */; };
-		7840C22C2A33B4EC00EEA3AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7840C22A2A33B4EC00EEA3AF /* Main.storyboard */; };
 		7840C22E2A33B4ED00EEA3AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7840C22D2A33B4ED00EEA3AF /* Assets.xcassets */; };
 		7840C2312A33B4ED00EEA3AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7840C22F2A33B4ED00EEA3AF /* LaunchScreen.storyboard */; };
 		7840C2462A33B4ED00EEA3AF /* ToDoListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840C2452A33B4ED00EEA3AF /* ToDoListUITests.swift */; };
@@ -38,11 +50,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		782D5AC42A467DFF00777655 /* TodoItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemViewController.swift; sourceTree = "<group>"; };
+		782D5AC92A467E6E00777655 /* BodyLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyLabelView.swift; sourceTree = "<group>"; };
+		782D5ACA2A467E6E00777655 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		782D5ACB2A467E6E00777655 /* ColorWheelPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorWheelPickerView.swift; sourceTree = "<group>"; };
+		782D5ACC2A467E6E00777655 /* SeparatorLineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorLineView.swift; sourceTree = "<group>"; };
+		782D5AD22A467EDB00777655 /* SF-Pro-Display-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Bold.otf"; sourceTree = "<group>"; };
+		782D5AD32A467EDB00777655 /* SF-Pro-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Semibold.otf"; sourceTree = "<group>"; };
+		782D5AD42A467EDB00777655 /* SF-ProText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-ProText-Regular.ttf"; sourceTree = "<group>"; };
+		782D5AD52A467EDB00777655 /* SF-ProText-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-ProText-Semibold.ttf"; sourceTree = "<group>"; };
+		782D5ADB2A467F3E00777655 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		782D5ADC2A467F3E00777655 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		782D5ADD2A467F3E00777655 /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		782D5ADE2A467F3E00777655 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		782D5ADF2A467F3E00777655 /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		7840C2212A33B4EC00EEA3AF /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7840C2242A33B4EC00EEA3AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7840C2262A33B4EC00EEA3AF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		7840C2282A33B4EC00EEA3AF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		7840C22B2A33B4EC00EEA3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7840C22D2A33B4ED00EEA3AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7840C2302A33B4ED00EEA3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7840C2322A33B4ED00EEA3AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -80,6 +104,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		782D5AC32A467DD000777655 /* TodoItem */ = {
+			isa = PBXGroup;
+			children = (
+				782D5AC82A467E6E00777655 /* Views */,
+				782D5AC42A467DFF00777655 /* TodoItemViewController.swift */,
+			);
+			path = TodoItem;
+			sourceTree = "<group>";
+		};
+		782D5AC82A467E6E00777655 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				782D5AC92A467E6E00777655 /* BodyLabelView.swift */,
+				782D5ACA2A467E6E00777655 /* TextView.swift */,
+				782D5ACB2A467E6E00777655 /* ColorWheelPickerView.swift */,
+				782D5ACC2A467E6E00777655 /* SeparatorLineView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		782D5AD12A467EDB00777655 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				782D5AD22A467EDB00777655 /* SF-Pro-Display-Bold.otf */,
+				782D5AD32A467EDB00777655 /* SF-Pro-Display-Semibold.otf */,
+				782D5AD42A467EDB00777655 /* SF-ProText-Regular.ttf */,
+				782D5AD52A467EDB00777655 /* SF-ProText-Semibold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		782D5ADA2A467F3E00777655 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				782D5ADB2A467F3E00777655 /* Date.swift */,
+				782D5ADC2A467F3E00777655 /* UIColor.swift */,
+				782D5ADD2A467F3E00777655 /* UIImage.swift */,
+				782D5ADE2A467F3E00777655 /* UIViewController.swift */,
+				782D5ADF2A467F3E00777655 /* UIFont.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		7840C2182A33B4EC00EEA3AF = {
 			isa = PBXGroup;
 			children = (
@@ -103,11 +170,12 @@
 		7840C2232A33B4EC00EEA3AF /* ToDoList */ = {
 			isa = PBXGroup;
 			children = (
+				7840C2542A33B66100EEA3AF /* Application */,
 				7840C2562A33B6CC00EEA3AF /* Models */,
-				7840C25E2A33D44E00EEA3AF /* ViewControllers */,
+				7840C25E2A33D44E00EEA3AF /* Screens */,
+				782D5ADA2A467F3E00777655 /* Extensions */,
 				7840C25F2A33D4FB00EEA3AF /* Services */,
 				7840C2552A33B67100EEA3AF /* SupportingFiles */,
-				7840C2542A33B66100EEA3AF /* Application */,
 			);
 			path = ToDoList;
 			sourceTree = "<group>";
@@ -141,6 +209,7 @@
 		7840C2552A33B67100EEA3AF /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				782D5AD12A467EDB00777655 /* Fonts */,
 				7840C22D2A33B4ED00EEA3AF /* Assets.xcassets */,
 				7840C2322A33B4ED00EEA3AF /* Info.plist */,
 				7840C22F2A33B4ED00EEA3AF /* LaunchScreen.storyboard */,
@@ -156,13 +225,12 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		7840C25E2A33D44E00EEA3AF /* ViewControllers */ = {
+		7840C25E2A33D44E00EEA3AF /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				7840C2282A33B4EC00EEA3AF /* ViewController.swift */,
-				7840C22A2A33B4EC00EEA3AF /* Main.storyboard */,
+				782D5AC32A467DD000777655 /* TodoItem */,
 			);
-			path = ViewControllers;
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		7840C25F2A33D4FB00EEA3AF /* Services */ = {
@@ -236,6 +304,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
@@ -277,9 +348,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				782D5AD72A467EDB00777655 /* SF-Pro-Display-Semibold.otf in Resources */,
 				7840C2312A33B4ED00EEA3AF /* LaunchScreen.storyboard in Resources */,
+				782D5AD82A467EDB00777655 /* SF-ProText-Regular.ttf in Resources */,
 				7840C22E2A33B4ED00EEA3AF /* Assets.xcassets in Resources */,
-				7840C22C2A33B4EC00EEA3AF /* Main.storyboard in Resources */,
+				782D5AD62A467EDB00777655 /* SF-Pro-Display-Bold.otf in Resources */,
+				782D5AD92A467EDB00777655 /* SF-ProText-Semibold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,9 +378,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7840C2292A33B4EC00EEA3AF /* ViewController.swift in Sources */,
 				7840C2252A33B4EC00EEA3AF /* AppDelegate.swift in Sources */,
+				782D5AE02A467F3E00777655 /* Date.swift in Sources */,
 				7840C2592A33B6FF00EEA3AF /* TodoItem.swift in Sources */,
+				782D5ACF2A467E6E00777655 /* ColorWheelPickerView.swift in Sources */,
+				782D5AC52A467DFF00777655 /* TodoItemViewController.swift in Sources */,
+				782D5ACE2A467E6E00777655 /* TextView.swift in Sources */,
+				782D5AD02A467E6E00777655 /* SeparatorLineView.swift in Sources */,
+				782D5AE32A467F3E00777655 /* UIViewController.swift in Sources */,
+				782D5AE12A467F3E00777655 /* UIColor.swift in Sources */,
+				782D5ACD2A467E6E00777655 /* BodyLabelView.swift in Sources */,
+				782D5AE42A467F3E00777655 /* UIFont.swift in Sources */,
+				782D5AE22A467F3E00777655 /* UIImage.swift in Sources */,
 				7840C2272A33B4EC00EEA3AF /* SceneDelegate.swift in Sources */,
 				7840C2612A33D50900EEA3AF /* FileCache.swift in Sources */,
 			);
@@ -345,14 +428,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		7840C22A2A33B4EC00EEA3AF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7840C22B2A33B4EC00EEA3AF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		7840C22F2A33B4ED00EEA3AF /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -485,14 +560,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = F7C5X72NM7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToDoList/SupportingFiles/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -516,14 +592,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = F7C5X72NM7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ToDoList/SupportingFiles/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

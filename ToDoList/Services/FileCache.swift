@@ -5,6 +5,10 @@ import Foundation
 final class FileCache {
     private(set) var todoItems: [String: TodoItem] = [:]
 
+    func toArray() -> [TodoItem] {
+        return Array(todoItems.values)
+    }
+    
     func add(_ item: TodoItem) {
         todoItems[item.id] = item
     }
@@ -26,7 +30,7 @@ extension FileCache {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileCacheErrors.DirectoryNotFound }
 
         let pathWithFileName = documentDirectory.appendingPathComponent(name + FileFormat.json.rawValue)
-
+        print(pathWithFileName)
         guard let data = try? Data(contentsOf: pathWithFileName) else { throw FileCacheErrors.PathToFileNotFound }
         guard let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [Any] else { throw FileCacheErrors.JSONConvertationError }
 
@@ -91,6 +95,25 @@ extension FileCache {
     }
 }
 
+extension FileCache {
+    func saveArrayToJSON(todoItems: [TodoItem], to file: String) {
+        self.todoItems = Dictionary(uniqueKeysWithValues: todoItems.map({($0.id, $0)}))
+        do {
+            try self.saveToJSON(file: file)
+        } catch FileCacheErrors.DirectoryNotFound {
+            print(FileCacheErrors.DirectoryNotFound.rawValue)
+        } catch FileCacheErrors.JSONConvertationError {
+            print(FileCacheErrors.JSONConvertationError.rawValue)
+        } catch FileCacheErrors.PathToFileNotFound {
+            print(FileCacheErrors.PathToFileNotFound.rawValue)
+        } catch FileCacheErrors.WriteFileError {
+            print(FileCacheErrors.WriteFileError.rawValue)
+        } catch {
+            print("Другая ошибка при сохранении файла")
+        }
+    }
+}
+
 // MARK: - Enums
 
 enum FileCacheErrors: String, Error {
@@ -107,3 +130,4 @@ private enum FileFormat: String {
 
 private let csvHeaderFormat = "id;text;importance;date_deadline;is_done;date_creation;date_changing"
 private let csvLineSeparator = "/r/n"
+

@@ -4,13 +4,13 @@ import Foundation
 
 struct TodoItem {
     let id: String
-    let text: String
-    let importance: Importance
-    let dateDeadline: Date?
-    let isDone: Bool
-    let dateСreation: Date
-    let dateChanging: Date?
-    let hexColor: String?
+    var text: String
+    var importance: Importance
+    var dateDeadline: Date?
+    var isDone: Bool
+    var dateСreation: Date
+    var dateChanging: Date?
+    var hexColor: String?
 
     init(id: String = UUID().uuidString, text: String, importance: Importance, dateDeadline: Date? = nil, isDone: Bool = false, dateСreation: Date = Date(), dateChanging: Date? = nil, hexColor: String? = nil) {
         self.id = id

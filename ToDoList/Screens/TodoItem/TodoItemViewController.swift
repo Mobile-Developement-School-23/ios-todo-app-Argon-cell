@@ -2,7 +2,7 @@ import UIKit
 
 final class TodoItemViewController: UIViewController {
     // MARK: - Properties
-
+    
     private lazy var textView = TextView()
     private lazy var scrollView = UIScrollView()
 
@@ -13,7 +13,6 @@ final class TodoItemViewController: UIViewController {
         stackView.layer.cornerRadius = cornerRadius
         stackView.axis = .vertical
         stackView.spacing = settingsStackViewSpacing
-        stackView.distribution = .fillProportionally
         stackView.layoutMargins = UIEdgeInsets(top: verticalStackEdgeSize, left: edgeSize, bottom: verticalStackEdgeSize, right: edgeSize)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
@@ -80,7 +79,7 @@ final class TodoItemViewController: UIViewController {
     
     private lazy var hexColorLabel: BodyLabelView = {
         let label = BodyLabelView()
-        label.text = UIColor.primaryLabel?.toHex()
+        label.text = UIColor.primaryLabel.toHex()
         return label
     }()
     
@@ -102,7 +101,7 @@ final class TodoItemViewController: UIViewController {
         switcher.addTarget(nil, action: #selector(switchChanged), for: .valueChanged)
         return switcher
     }()
-    
+
     // Button properties
     private lazy var deleteButton: UIButton = {
         let button = UIButton()
@@ -138,6 +137,9 @@ final class TodoItemViewController: UIViewController {
         return datePicker
     }()
     
+    private var textHeightConstraint: NSLayoutConstraint? = nil
+    private var settingsAndDeleteConstraints: [NSLayoutConstraint] = []
+
     // SeparatorViews properties
     private lazy var separator = SeparatorLineView()
     private lazy var secondSeparator = SeparatorLineView()
@@ -166,13 +168,15 @@ final class TodoItemViewController: UIViewController {
         return slider
     }()
     
-    private let fileCache = FileCache()
+//    private let fileCache = FileCache()
     private var currentTodoItem: TodoItem? = nil
+    public var dataCompletionHandler: ((TodoItem?) -> Void)?
     
     // MARK: - Initializators
 
     init(item: TodoItem?) {
         super.init(nibName: nil, bundle: nil)
+        currentTodoItem = item
     }
     
     convenience init() {
@@ -186,31 +190,46 @@ final class TodoItemViewController: UIViewController {
     
     // MARK: - Override methods
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        setUpLandcsapeConstraints()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeLoad()
         setUpView()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if textHeightConstraint == nil {
+            textHeightConstraint = textView.heightAnchor.constraint(greaterThanOrEqualToConstant: textViewHeight)
+        }
+        
+        if UIDevice.current.orientation.isLandscape && currentTodoItem != nil {
+            textHeightConstraint?.constant = UIScreen.main.bounds.height - safeAreaHeights - 2 * edgeSize - (UIApplication.shared.windows.first?.windowScene?.keyWindow?.safeAreaInsets.bottom ?? 0)
+            if !settingsStackView.constraints.isEmpty && !deleteButton.constraints.isEmpty {
+                settingsAndDeleteConstraints = settingsStackView.constraints + deleteButton.constraints
+                settingsStackView.isHidden = true
+            }
+            NSLayoutConstraint.deactivate(settingsStackView.constraints + deleteButton.constraints)
+            
+            deleteButton.isHidden = true
+        } else {
+            print(settingsAndDeleteConstraints)
+            NSLayoutConstraint.activate(settingsAndDeleteConstraints)
+            textHeightConstraint?.constant = textViewHeight
+            settingsStackView.isHidden = false
+            deleteButton.isHidden = false
+        }
+        
+        view.layoutIfNeeded()
     }
 }
 
 // MARK: - Extensions
 
 extension TodoItemViewController {
-    // MARK: - Load saved items
-
-    // Delete when we will make rootViewController
-    private func makeLoad() {
-        do {
-            try fileCache.loadFromJSON(file: mainDataBaseFileName)
-        } catch {
-            print("Ошибочка при загрузке данных")
-        }
-        
-        if !fileCache.todoItems.isEmpty {
-            currentTodoItem = fileCache.todoItems.first!.value
-        }
-    }
-    
     // MARK: - Settings views
 
     private func setUpView() {
@@ -219,9 +238,6 @@ extension TodoItemViewController {
         
         // Navigation setup
         title = todoItemTitle
-        navigationItem.leftBarButtonItem = .init(title: cancelTitle, style: .plain, target: nil, action: nil)
-        navigationItem.rightBarButtonItem = .init(title: saveTitle, style: .plain, target: self, action: #selector(saveTodoItem))
-        navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.tertiaryLabel!], for: .disabled)
         
         // TextView setup
         textView.delegate = self
@@ -240,10 +256,14 @@ extension TodoItemViewController {
         if let currentTodoItem = currentTodoItem {
             var color: UIColor? = .primaryLabel
             if let hexColor = currentTodoItem.hexColor {
-                color = UIColor.colorFromHex(hexColor)
+                if hexColor == "#FFFFFF" || hexColor == "#000000" {
+                    color = .primaryLabel
+                } else {
+                    color = UIColor.colorFromHex(hexColor)
+                }
                 hexColorLabel.text = hexColor
             } else {
-                hexColorLabel.text = UIColor.primaryLabel?.toHex()
+                hexColorLabel.text = UIColor.primaryLabel.toHex()
             }
            
             textView.text = currentTodoItem.text
@@ -269,6 +289,7 @@ extension TodoItemViewController {
         
             dateDeadlineButton.isHidden = true
             deleteButton.isEnabled = false
+//            saveButton.isEnabled = false
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
                 
@@ -278,6 +299,11 @@ extension TodoItemViewController {
     
     // MARK: - Obj-c methods
 
+    @objc func dismissTapped(sender: UIBarButtonItem) {
+        print(1)
+        dismiss(animated: true, completion: nil)
+    }
+    
     @objc func sliderChange(sender: UISlider) {
         selectedColorButton.backgroundColor = selectedColorButton.backgroundColor?.adjust(brightnessBy: CGFloat(sender.value))
         hexColorLabel.text = selectedColorButton.backgroundColor?.toHex()
@@ -310,60 +336,19 @@ extension TodoItemViewController {
             currentTodoItem = TodoItem(text: textView.text, importance: importance, dateDeadline: dateDeadline, hexColor: textColor)
         }
         
-        fileCache.add(currentTodoItem!)
-        do {
-            try fileCache.saveToJSON(file: mainDataBaseFileName)
-        } catch FileCacheErrors.DirectoryNotFound {
-            print(FileCacheErrors.DirectoryNotFound.rawValue)
-        } catch FileCacheErrors.JSONConvertationError {
-            print(FileCacheErrors.JSONConvertationError.rawValue)
-        } catch FileCacheErrors.PathToFileNotFound {
-            print(FileCacheErrors.PathToFileNotFound.rawValue)
-        } catch FileCacheErrors.WriteFileError {
-            print(FileCacheErrors.WriteFileError.rawValue)
-        } catch {
-            print("Другая ошибка при сохранении файла")
+        if let completion = dataCompletionHandler {
+            completion(currentTodoItem!)
         }
-        
-        deleteButton.isEnabled = true
+        dismiss(animated: true, completion: nil)
         dismissKeyboard()
     }
     
     @objc func deleteTodoItem(sender: UIButton) {
-        fileCache.remove(with: currentTodoItem!.id)
-        do {
-            try fileCache.saveToJSON(file: mainDataBaseFileName)
-        } catch FileCacheErrors.DirectoryNotFound {
-            print(FileCacheErrors.DirectoryNotFound.rawValue)
-        } catch FileCacheErrors.JSONConvertationError {
-            print(FileCacheErrors.JSONConvertationError.rawValue)
-        } catch FileCacheErrors.PathToFileNotFound {
-            print(FileCacheErrors.PathToFileNotFound.rawValue)
-        } catch FileCacheErrors.WriteFileError {
-            print(FileCacheErrors.WriteFileError.rawValue)
-        } catch {
-            print("Другая ошибка при сохранении файла, когда элемент удален")
+        if let completion = dataCompletionHandler {
+            completion(nil)
         }
-    
-        currentTodoItem = nil
         
-        textView.text = placeholderTitleForTextView
-        textView.textColor = .secondaryLabel
-        hexColorLabel.text = UIColor.primaryLabel?.toHex()
-        selectedColorButton.backgroundColor = .primaryLabel
-        importanceSegmentControl.selectedSegmentIndex = 1
-        
-        dateDeadlineButton.isHidden = true
-        calendarView.isHidden = true
-        fourthSeparator.isHidden = true
-        secondSeparator.isHidden = true
-        colorPickerStackView.isHidden = true
-        dateDeadLineSwtich.isOn = false
-        deleteButton.isEnabled = false
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        
-        colorBrightnessSlider.value = 0.5
-        
+        dismiss(animated: true, completion: nil)
     }
         
     @objc func switchChanged(sender: UISwitch) {
@@ -394,6 +379,7 @@ extension TodoItemViewController {
 
     private func addSubViews() {
         view.addSubview(scrollView)
+        
         scrollView.addSubview(textView)
         scrollView.addSubview(settingsStackView)
         scrollView.addSubview(deleteButton)
@@ -446,7 +432,8 @@ extension TodoItemViewController {
         textView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -edgeSize).isActive = true
         textView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: edgeSize).isActive = true
         textView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -2 * edgeSize).isActive = true
-        textView.heightAnchor.constraint(greaterThanOrEqualToConstant: textViewHeight).isActive = true
+        textHeightConstraint = textView.heightAnchor.constraint(greaterThanOrEqualToConstant: textViewHeight)
+        textHeightConstraint?.isActive = true
         
         // SettingsStack anchors
         settingsStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -458,52 +445,82 @@ extension TodoItemViewController {
         // Separators anchors
         separator.translatesAutoresizingMaskIntoConstraints = false
         separator.heightAnchor.constraint(equalToConstant: separatorHeight).isActive = true
-        
+
         secondSeparator.translatesAutoresizingMaskIntoConstraints = false
         secondSeparator.heightAnchor.constraint(equalToConstant: separatorHeight).isActive = true
 
         thirdSeparator.translatesAutoresizingMaskIntoConstraints = false
         thirdSeparator.heightAnchor.constraint(equalToConstant: separatorHeight).isActive = true
-        
+
         fourthSeparator.translatesAutoresizingMaskIntoConstraints = false
         fourthSeparator.heightAnchor.constraint(equalToConstant: separatorHeight).isActive = true
-                
+        
         // SegmentControl anchors
         importanceSegmentControl.translatesAutoresizingMaskIntoConstraints = false
-        
+
         importanceSegmentControl.widthAnchor.constraint(equalToConstant: importanceSegmentControlWidth).isActive = true
         importanceSegmentControl.heightAnchor.constraint(equalToConstant: importanceSegmentControlHeight).isActive = true
-        
+
         // Deletebutton anchors
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        
+
         deleteButton.heightAnchor.constraint(equalToConstant: deleteButtonHeight).isActive = true
         deleteButton.topAnchor.constraint(equalTo: settingsStackView.bottomAnchor, constant: edgeSize).isActive = true
         deleteButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: edgeSize).isActive = true
         deleteButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -edgeSize).isActive = true
         deleteButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
         
-        // DateDeadlineButton anchors
-        dateDeadlineButton.translatesAutoresizingMaskIntoConstraints = false
-        dateDeadlineButton.heightAnchor.constraint(equalToConstant: dateDeadlineButtonHeight).isActive = true
-        
-        // Удалить эти констрейнты
         colorPickerView.translatesAutoresizingMaskIntoConstraints = false
         colorPickerView.heightAnchor.constraint(equalToConstant: 56).isActive = true
         colorPickerView.leadingAnchor.constraint(equalTo: settingsStackView.leadingAnchor, constant: edgeSize).isActive = true
         colorPickerView.trailingAnchor.constraint(equalTo: settingsStackView.trailingAnchor, constant: -edgeSize).isActive = true
-        
+
         selectedColorButton.translatesAutoresizingMaskIntoConstraints = false
         selectedColorButton.heightAnchor.constraint(equalToConstant: selectedColorButtonSizes).isActive = true
         selectedColorButton.widthAnchor.constraint(equalToConstant: selectedColorButtonSizes).isActive = true
-        
+
         colorBrightnessSlider.translatesAutoresizingMaskIntoConstraints = false
         colorBrightnessSlider.leadingAnchor.constraint(equalTo: settingsStackView.leadingAnchor, constant: edgeSize).isActive = true
         colorBrightnessSlider.trailingAnchor.constraint(equalTo: settingsStackView.trailingAnchor, constant: -edgeSize).isActive = true
     }
     
+    private func setUpLandcsapeConstraints() {
+        // Landscape constraints setup
+        if UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isLandscape == true, currentTodoItem != nil {
+            textHeightConstraint?.constant = UIScreen.main.bounds.height - safeAreaHeights - 2 * edgeSize - (UIApplication.shared.windows.first?.windowScene?.keyWindow?.safeAreaInsets.bottom ?? 0)
+            if !settingsStackView.constraints.isEmpty {
+                settingsAndDeleteConstraints = settingsStackView.constraints + deleteButton.constraints
+            }
+            print(settingsStackView.constraints + deleteButton.constraints)
+            NSLayoutConstraint.deactivate(settingsStackView.constraints + deleteButton.constraints)
+            settingsStackView.isHidden = true
+            deleteButton.isHidden = true
+        }
+    }
+    
     // MARK: - Helper functions
 
+    func setupNavigatorButtons() {
+        setupLeftNavigatorButton()
+        setupRightNavigatorButton()
+    }
+    
+    func setUserInteractionDisabled() {
+        deleteButton.isHidden = true
+        textView.isUserInteractionEnabled = false
+        importanceSegmentControl.isUserInteractionEnabled = false
+        selectedColorButton.isUserInteractionEnabled = false
+        dateDeadLineSwtich.isUserInteractionEnabled = false
+    }
+    
+    func setupLeftNavigatorButton() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: cancelTitle, style: .plain, target: self, action: #selector(dismissTapped(sender:)))
+    }
+    
+    func setupRightNavigatorButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: saveTitle, style: .plain, target: self, action: #selector(saveTodoItem))
+    }
+    
     private func indexByImportance(_ importance: Importance) -> Int {
         switch importance {
             case .unimportant:
@@ -617,8 +634,8 @@ private let deleteButtonHeight: CGFloat = 56
 
 private let importanceSegmentControlWidth: CGFloat = 156
 
-private let cornerRadius: CGFloat = 16
-private let edgeSize: CGFloat = 16
+let cornerRadius: CGFloat = 16
+let edgeSize: CGFloat = 16
 private let verticalStackEdgeSize: CGFloat = 12.5
 private let settingsStackViewSpacing: CGFloat = 11
 
@@ -634,6 +651,6 @@ private let doBeforeTitle = "Cделать до"
 private let importanceTitle = "Важность"
 private let colorTextTitle = "Цвет текста"
 
-private let mainDataBaseFileName = "2"
+let mainDataBaseFileName = "2"
 
 private var items: [Any] = [UIImage.lowImportanceIcon, NSAttributedString(string: "нет", attributes: [NSAttributedString.Key.font: UIFont.subhead!]), UIImage.highImportanceIcon]

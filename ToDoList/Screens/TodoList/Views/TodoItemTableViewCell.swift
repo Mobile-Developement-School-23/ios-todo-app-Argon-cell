@@ -1,4 +1,5 @@
 import UIKit
+import TodoItem
 
 class TodoItemTableViewCell: UITableViewCell {
     
@@ -133,15 +134,15 @@ class TodoItemTableViewCell: UITableViewCell {
             checkMarkButton.isHidden = false
             importanceImageView.isHidden = false
             switch item.importance {
-                case .important:
-                    importanceImageView.image = UIImage(named: "HighImportance")
-                    checkMarkButton.setImage(checkHighImportanceMarkImage, for: .normal)
-                case .unimportant:
-                    importanceImageView.image = UIImage(named: "LowImportance")
-                    checkMarkButton.setImage(checkMarkImage, for: .normal)
-                case .ordinary:
-                    importanceImageView.isHidden = true
-                    checkMarkButton.setImage(checkMarkImage, for: .normal)
+            case .important:
+                importanceImageView.image = UIImage(named: "HighImportance")
+                checkMarkButton.setImage(checkHighImportanceMarkImage, for: .normal)
+            case .unimportant:
+                importanceImageView.image = UIImage(named: "LowImportance")
+                checkMarkButton.setImage(checkMarkImage, for: .normal)
+            case .ordinary:
+                importanceImageView.isHidden = true
+                checkMarkButton.setImage(checkMarkImage, for: .normal)
             }
             
             if item.isDone {

@@ -11,33 +11,26 @@ extension TodoListViewController {
                     textSaveAction = "Make undone"
                     imageSaveAction = UIImage(systemName: "circle")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
                 }
-                
                 let saveAction = UIAction(title: textSaveAction, image: imageSaveAction) { _ in
                         self.itemDoneAction(indexPath.row)
                         self.makeSave()
                         tableView.reloadData()
                 }
-                
                 let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash.fill")?.withTintColor(.red, renderingMode: .alwaysOriginal)) { _ in
                     self.todoItems.remove(at: indexPath.row)
                     self.headerView.update(doneCount: self.todoItems.filter { $0.isDone }.count)
                     self.makeSave()
                     tableView.reloadData()
                 }
-                
                 let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [saveAction, deleteAction])
-                
                 return menu
             }
-            
             return conifguration
         } else {
             return nil
         }
     }
-    
     func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
-        
         let item = todoItems.first(where: { $0.id == configuration.identifier as! String })
         let vc = TodoItemViewController(item: item)
         vc.navigationItem.largeTitleDisplayMode = .never

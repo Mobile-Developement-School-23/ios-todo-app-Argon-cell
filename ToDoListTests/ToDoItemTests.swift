@@ -179,7 +179,7 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(todoItemCsvHelper, "1;тест;;;false;1100133188.0;")
     }
 
-//    //MARK: - TodoItem, parsing json & csv тесты
+    // MARK: - TodoItem, parsing json & csv тесты
     func test_ParseFromJSONgetCSV() {
         // Тест на проверку инициализации TodoItem c помощью parse(json: Any) и получение из него csv: String
 

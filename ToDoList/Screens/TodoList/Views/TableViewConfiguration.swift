@@ -1,4 +1,5 @@
 import UIKit
+import TodoItem
 
 extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,7 +52,7 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var currentTodoItem: TodoItem? = nil
+        var currentTodoItem: TodoItem?
         
         if todoItems[indexPath.row].dateСreation == .distantPast {
             currentTodoItem = nil
@@ -102,7 +103,6 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
             headerView.update(doneCount: todoItems.filter { $0.isDone }.count)
         }
     }
-    
     
     @objc func checkMarkTap(sender: UIButton) {
         

@@ -1,4 +1,5 @@
 import UIKit
+import TodoItem
 
 final class TodoItemViewController: UIViewController {
     // MARK: - Properties
@@ -137,7 +138,7 @@ final class TodoItemViewController: UIViewController {
         return datePicker
     }()
     
-    private var textHeightConstraint: NSLayoutConstraint? = nil
+    private var textHeightConstraint: NSLayoutConstraint?
     private var settingsAndDeleteConstraints: [NSLayoutConstraint] = []
 
     // SeparatorViews properties
@@ -169,7 +170,7 @@ final class TodoItemViewController: UIViewController {
     }()
     
 //    private let fileCache = FileCache()
-    private var currentTodoItem: TodoItem? = nil
+    private var currentTodoItem: TodoItem?
     public var dataCompletionHandler: ((TodoItem?) -> Void)?
     
     // MARK: - Initializators
@@ -324,7 +325,7 @@ extension TodoItemViewController {
         }
         
         if currentTodoItem != nil {
-            currentTodoItem = TodoItem(id: currentTodoItem!.id, text: textView.text, importance: importance, dateDeadline: dateDeadline, isDone: currentTodoItem!.isDone, dateСreation: currentTodoItem!.dateСreation, dateChanging: Date(), hexColor: textColor)
+            currentTodoItem =  TodoItem(id: currentTodoItem!.id, text: textView.text, importance: importance, dateDeadline: dateDeadline, isDone: currentTodoItem!.isDone, dateСreation: currentTodoItem!.dateСreation, dateChanging: Date(), hexColor: textColor)
         } else {
             currentTodoItem = TodoItem(text: textView.text, importance: importance, dateDeadline: dateDeadline, hexColor: textColor)
         }
@@ -517,25 +518,25 @@ extension TodoItemViewController {
     
     private func indexByImportance(_ importance: Importance) -> Int {
         switch importance {
-            case .unimportant:
-                return 0
-            case .ordinary:
-                return 1
-            case .important:
-                return 2
+        case .unimportant:
+            return 0
+        case .ordinary:
+            return 1
+        case .important:
+            return 2
         }
     }
     
     private func importanceByIndex(_ index: Int) -> Importance {
         switch index {
-            case 0:
-                return .unimportant
-            case 1:
-                return .ordinary
-            case 2:
-                return .important
-            default:
-                return .ordinary
+        case 0:
+            return .unimportant
+        case 1:
+            return .ordinary
+        case 2:
+            return .important
+        default:
+            return .ordinary
         }
     }
     
@@ -647,4 +648,6 @@ private let colorTextTitle = "Цвет текста"
 
 let mainDataBaseFileName = "2"
 
-private var items: [Any] = [UIImage.lowImportanceIcon, NSAttributedString(string: "нет", attributes: [NSAttributedString.Key.font: UIFont.subhead!]), UIImage.highImportanceIcon]
+private var items: [Any] = [UIImage.lowImportanceIcon,
+                            NSAttributedString(string: "нет", attributes: [NSAttributedString.Key.font: UIFont.subhead!]),
+                            UIImage.highImportanceIcon]

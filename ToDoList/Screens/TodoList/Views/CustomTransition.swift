@@ -1,7 +1,6 @@
 import UIKit
 import Foundation
 
-
 class PresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
     var animator: UIViewImplicitlyAnimating?
     
@@ -105,7 +104,6 @@ class DismissTransition: NSObject, UIViewControllerAnimatedTransitioning {
     }
     
 }
-
 
 extension TodoListViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {

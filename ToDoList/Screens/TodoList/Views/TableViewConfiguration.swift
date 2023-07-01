@@ -18,7 +18,8 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         if self.todoItems[indexPath.row].dateСreation != .distantPast {
             let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, handler in
                 self.todoItems.remove(at: indexPath.row)
-                self.headerView.update(doneCount: self.todoItems.filter { $0.isDone }.count)
+                let filteredTodoItemsCount = self.todoItems.filter { $0.isDone }.count
+                self.headerView.update(doneCount: filteredTodoItemsCount == 0 ? self.doneTodoItems.count : filteredTodoItemsCount)
                 self.makeSave()
                 tableView.reloadData()
                 handler(true)
@@ -67,9 +68,9 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         navigationController.modalPresentationStyle = .custom
         navigationController.transitioningDelegate = self
 
-        present(navigationController, animated: true, completion: nil)
-        
-        vc.dataCompletionHandler = { [self] item in
+        vc.dataCompletionHandler = { [weak self] item in
+            guard let self = self else { return }
+            
             if currentTodoItem != nil {
                 if let item = item {
                     self.todoItems[indexPath.row] = item
@@ -81,13 +82,15 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
                     self.todoItems.append(item)
                 }
             }
-            headerView.update(doneCount: todoItems.filter { $0.isDone }.count)
-            todoItems.sort(by: { $0.dateСreation > $1.dateСreation })
-            makeSave()
+            self.todoItems.sort(by: { $0.dateСreation > $1.dateСreation })
+            self.makeSave()
+            
+            let filteredTodoItemsCount = self.todoItems.filter { $0.isDone }.count
+            self.headerView.update(doneCount: filteredTodoItemsCount == 0 ? self.doneTodoItems.count : filteredTodoItemsCount)
             tableView.reloadData()
         }
-        
         tableView.deselectRow(at: indexPath, animated: true)
+        present(navigationController, animated: true, completion: nil)
     }
     
     func itemDoneAction(_ index: Int) {

@@ -41,6 +41,7 @@ class TodoItemTableViewCell: UITableViewCell {
         dateDeadlineStack.axis = .horizontal
         
         contentView.backgroundColor = .secondaryBack
+        separatorInset = UIEdgeInsets(top: 0, left: checkMarkButton.bounds.width + 54, bottom: 0, right: 0)
         
         itemTextLabel.font = .body
         itemTextLabel.textColor = .primaryLabel
@@ -118,10 +119,18 @@ class TodoItemTableViewCell: UITableViewCell {
             importanceImageView.isHidden = true
         } else {
             itemTextLabel.attributedText = NSAttributedString(string: item.text)
-            itemTextLabel.textColor = UIColor.colorFromHex(item.hexColor ?? "")
+            if let stringColor = item.hexColor {
+                if stringColor == "#FFFFFF" || stringColor == "#000000" {
+                    itemTextLabel.textColor = .primaryLabel
+                } else {
+                    itemTextLabel.textColor = UIColor.colorFromHex(stringColor)
+                }
+            } else {
+                itemTextLabel.textColor = .primaryLabel
+            }
             
             if let dateDeadline = item.dateDeadline {
-                dateDeadlineLabel.text = dateDeadline.toString()
+                dateDeadlineLabel.text = dateDeadline.toString(with: "d MMMM")
                 calendarImageView.image = calendarImage
                 dateDeadlineStack.isHidden = false
             } else {
@@ -148,6 +157,7 @@ class TodoItemTableViewCell: UITableViewCell {
             if item.isDone {
                 checkMarkButton.setImage(checkDoneMarkImage, for: .normal)
                 itemTextLabel.attributedText = NSAttributedString(string: item.text, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
+                itemTextLabel.textColor = .secondaryLabel
             } else {
                 itemTextLabel.attributedText = NSAttributedString(string: item.text, attributes: [NSAttributedString.Key.strikethroughStyle: 0])
             }

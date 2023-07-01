@@ -255,7 +255,11 @@ extension TodoItemViewController {
         if let currentTodoItem = currentTodoItem {
             var color: UIColor? = .primaryLabel
             if let hexColor = currentTodoItem.hexColor {
-                color = UIColor.colorFromHex(hexColor)
+                if hexColor == "#FFFFFF" || hexColor == "#000000" {
+                    color = .primaryLabel
+                } else {
+                    color = UIColor.colorFromHex(hexColor)
+                }
                 hexColorLabel.text = hexColor
             } else {
                 hexColorLabel.text = UIColor.primaryLabel.toHex()

@@ -13,9 +13,9 @@ extension TodoListViewController {
                 }
                 
                 let saveAction = UIAction(title: textSaveAction, image: imageSaveAction) { _ in
-                        self.itemDoneAction(indexPath.row)
-                        self.makeSave()
-                        tableView.reloadData()
+                    self.itemDoneAction(indexPath.row)
+                    self.makeSave()
+                    tableView.reloadData()
                 }
                 
                 let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash.fill")?.withTintColor(.red, renderingMode: .alwaysOriginal)) { _ in
@@ -37,7 +37,6 @@ extension TodoListViewController {
     }
     
     func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
-        
         let item = todoItems.first(where: { $0.id == configuration.identifier as! String })
         let vc = TodoItemViewController(item: item)
         vc.navigationItem.largeTitleDisplayMode = .never

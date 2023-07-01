@@ -58,7 +58,7 @@ final class TodoItemViewController: UIViewController {
         return stackView
     }()
     
-    // Label properties    
+    // Label properties
     private lazy var importanceLabel: BodyLabelView = {
         let label = BodyLabelView()
         label.text = importanceTitle
@@ -189,10 +189,12 @@ final class TodoItemViewController: UIViewController {
     }
     
     // MARK: - Override methods
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         setUpLandcsapeConstraints()
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -229,13 +231,13 @@ final class TodoItemViewController: UIViewController {
 
 extension TodoItemViewController {
     // MARK: - Settings views
+
     private func setUpView() {
         // Root view setup
         view.backgroundColor = .primaryBack
         
         // Navigation setup
         title = todoItemTitle
-        
         
         // TextView setup
         textView.delegate = self
@@ -254,7 +256,11 @@ extension TodoItemViewController {
         if let currentTodoItem = currentTodoItem {
             var color: UIColor? = .primaryLabel
             if let hexColor = currentTodoItem.hexColor {
-                color = UIColor.colorFromHex(hexColor)
+                if hexColor == "#FFFFFF" || hexColor == "#000000" {
+                    color = .primaryLabel
+                } else {
+                    color = UIColor.colorFromHex(hexColor)
+                }
                 hexColorLabel.text = hexColor
             } else {
                 hexColorLabel.text = UIColor.primaryLabel.toHex()
@@ -292,6 +298,7 @@ extension TodoItemViewController {
     }
     
     // MARK: - Obj-c methods
+
     @objc func dismissTapped(sender: UIBarButtonItem) {
         print(1)
         dismiss(animated: true, completion: nil)
@@ -475,12 +482,11 @@ extension TodoItemViewController {
         colorBrightnessSlider.translatesAutoresizingMaskIntoConstraints = false
         colorBrightnessSlider.leadingAnchor.constraint(equalTo: settingsStackView.leadingAnchor, constant: edgeSize).isActive = true
         colorBrightnessSlider.trailingAnchor.constraint(equalTo: settingsStackView.trailingAnchor, constant: -edgeSize).isActive = true
-    
     }
     
     private func setUpLandcsapeConstraints() {
-        //Landscape constraints setup
-        if UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isLandscape == true && currentTodoItem != nil {
+        // Landscape constraints setup
+        if UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isLandscape == true, currentTodoItem != nil {
             textHeightConstraint?.constant = UIScreen.main.bounds.height - safeAreaHeights - 2 * edgeSize - (UIApplication.shared.windows.first?.windowScene?.keyWindow?.safeAreaInsets.bottom ?? 0)
             if !settingsStackView.constraints.isEmpty {
                 settingsAndDeleteConstraints = settingsStackView.constraints + deleteButton.constraints
@@ -508,7 +514,7 @@ extension TodoItemViewController {
     }
     
     func setupLeftNavigatorButton() {
-        navigationItem.leftBarButtonItem =  UIBarButtonItem(title: cancelTitle, style: .plain, target: self, action: #selector(dismissTapped(sender: )))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: cancelTitle, style: .plain, target: self, action: #selector(dismissTapped(sender:)))
     }
     
     func setupRightNavigatorButton() {

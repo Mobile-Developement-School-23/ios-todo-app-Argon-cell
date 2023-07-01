@@ -8,7 +8,7 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoItemTableViewCell.identifier, for: indexPath) as? TodoItemTableViewCell else { fatalError("Ошибка в создании ячейки") }
         cell.configureCell(todoItems[indexPath.row])
-        cell.checkMarkButton.addTarget(self, action: #selector(checkMarkTap), for: .touchUpInside)
+        cell.checkMarkButton.addTarget(self, action: #selector(self.checkMarkTap), for: .touchUpInside)
         cell.checkMarkButton.tag = indexPath.row
         return cell
     }
@@ -18,6 +18,8 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
             let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, handler in
                 self.todoItems.remove(at: indexPath.row)
                 self.headerView.update(doneCount: self.todoItems.filter { $0.isDone }.count)
+                let filteredTodoItemsCount = self.todoItems.filter { $0.isDone }.count
+                self.headerView.update(doneCount: filteredTodoItemsCount == 0 ? self.doneTodoItems.count : filteredTodoItemsCount)
                 self.makeSave()
                 tableView.reloadData()
                 handler(true)
@@ -66,9 +68,9 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         navigationController.modalPresentationStyle = .custom
         navigationController.transitioningDelegate = self
 
-        present(navigationController, animated: true, completion: nil)
-        
-        vc.dataCompletionHandler = { [self] item in
+        vc.dataCompletionHandler = { [weak self] item in
+            guard let self = self else { return }
+               
             if currentTodoItem != nil {
                 if let item = item {
                     self.todoItems[indexPath.row] = item
@@ -80,13 +82,16 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
                     self.todoItems.append(item)
                 }
             }
-            headerView.update(doneCount: todoItems.filter { $0.isDone }.count)
-            todoItems.sort(by: { $0.dateСreation > $1.dateСreation })
-            makeSave()
+            self.todoItems.sort(by: { $0.dateСreation > $1.dateСreation })
+            self.makeSave()
+
+            let filteredTodoItemsCount = self.todoItems.filter { $0.isDone }.count
+            self.headerView.update(doneCount: filteredTodoItemsCount == 0 ? self.doneTodoItems.count : filteredTodoItemsCount)
             tableView.reloadData()
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
+        present(navigationController, animated: true, completion: nil)
     }
     
     func itemDoneAction(_ index: Int) {
@@ -103,12 +108,9 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
     @objc func checkMarkTap(sender: UIButton) {
-        
         self.itemDoneAction(sender.tag)
-            self.makeSave()
-            tableView.reloadData()
-        
+        self.makeSave()
+        self.tableView.reloadData()
     }
 }

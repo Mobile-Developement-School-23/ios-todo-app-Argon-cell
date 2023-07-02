@@ -1,7 +1,9 @@
 import UIKit
 
 class TodoListViewController: UIViewController {
-    let fileCache = FileCache()
+    //MARK: - Properties
+    var fileCache: FileCache!
+    
     var doneTodoItems: [TodoItem] = []
     var todoItems: [TodoItem] = []
     
@@ -17,23 +19,61 @@ class TodoListViewController: UIViewController {
         return tableView
     }()
     
+    //MARK: - Inits
+    init(fileCache: FileCache?) {
+        super.init(nibName: nil, bundle: nil)
+        if let fileCache = fileCache {
+            self.fileCache = fileCache
+        } else {
+            self.fileCache = FileCache()
+        }
+    }
+    
+    convenience init() {
+        self.init(fileCache: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - Override methods
     override func viewDidLoad() {
         super.viewDidLoad()
         makeLoad()
         setUpView()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        configurePlusButtonFrame()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        view.addSubview(configureButton(button: plusButton))
+    }
+    
+    //MARK: - Methods
     private func makeLoad() {
         do {
             try fileCache.loadFromJSON(file: mainDataBaseFileName)
+        } catch FileCacheErrors.directoryNotFound {
+            debugPrint(FileCacheErrors.directoryNotFound.rawValue)
+        } catch FileCacheErrors.jSONConvertationError {
+            debugPrint(FileCacheErrors.jSONConvertationError.rawValue)
+        } catch FileCacheErrors.pathToFileNotFound {
+            debugPrint(FileCacheErrors.pathToFileNotFound.rawValue)
+        } catch FileCacheErrors.writeFileError {
+            debugPrint(FileCacheErrors.writeFileError.rawValue)
         } catch {
-            print("Ошибочка при загрузке данных")
+            debugPrint("Другая ошибка при загрузке файла")
         }
         
         todoItems = fileCache.toArray().sorted(by: { $0.dateСreation > $1.dateСreation })
         removeDoneTodoItems()
         todoItems.append(TodoItem(text: "", importance: .important, dateСreation: Date.distantPast))
-        headerView.update(doneCount: doneTodoItems.count)
+        headerView.update(doneTodoItems.count)
     }
     
     private func setUpView() {
@@ -60,15 +100,6 @@ class TodoListViewController: UIViewController {
     
     private func addSubViews() {
         view.addSubview(tableView)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        configurePlusButtonFrame()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        view.addSubview(configureButton(button: plusButton))
     }
     
     private func setupLayout() {

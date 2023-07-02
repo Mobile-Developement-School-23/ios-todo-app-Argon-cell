@@ -1,14 +1,12 @@
 import UIKit
 
 extension TodoListViewController {
-
     func configurePlusButtonFrame() {
         plusButton.frame = CGRect(x: view.bounds.midX - 25, y: view.bounds.maxY - 100, width: 40, height: 40)
-   }
+    }
     
-     func configureButton(button: UIButton) -> UIButton {
-
-        let image = UIImage(systemName: "plus.circle.fill")?.withTintColor(.blue, renderingMode: .alwaysOriginal)
+    func configureButton(button: UIButton) -> UIButton {
+        let image = UIImage(systemName: "plus.circle.fill")?.withTintColor(.customBlue ?? .blue, renderingMode: .alwaysOriginal)
   
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
@@ -16,11 +14,10 @@ extension TodoListViewController {
         button.setImage(image, for: .normal)
          
         button.backgroundColor = .clear
-         button.layer.shadowColor = UIColor.blue.cgColor
-         button.layer.shadowOpacity = 0.3
+        button.layer.shadowColor = UIColor.customBlue?.cgColor ?? UIColor.blue.cgColor
+        button.layer.shadowOpacity = 0.3
         button.layer.shadowOffset = CGSize(width: 0, height: 3)
         button.layer.shadowRadius = 8
-        
         
         button.addTarget(self, action: #selector(tapPlusButton), for: .touchUpInside)
 
@@ -28,7 +25,6 @@ extension TodoListViewController {
     }
     
     @objc func tapPlusButton() {
-        
         let vc = TodoItemViewController()
         let navigationController = UINavigationController(rootViewController: vc)
         navigationController.modalPresentationStyle = .formSheet

@@ -79,7 +79,7 @@ final class TodoItemViewController: UIViewController {
     
     private lazy var hexColorLabel: BodyLabelView = {
         let label = BodyLabelView()
-        label.text = UIColor.primaryLabel.toHex()
+        label.text = UIColor.primaryLabel?.toHex()
         return label
     }()
     
@@ -106,7 +106,7 @@ final class TodoItemViewController: UIViewController {
     private lazy var deleteButton: UIButton = {
         let button = UIButton()
         button.setTitle(deleteTitle, for: .normal)
-        button.setTitleColor(.red, for: .normal)
+        button.setTitleColor(.customRed ?? .red, for: .normal)
         button.setTitleColor(.tertiaryLabel, for: .disabled)
         button.layer.cornerRadius = cornerRadius
         button.backgroundColor = .secondaryBack
@@ -116,7 +116,7 @@ final class TodoItemViewController: UIViewController {
     
     private lazy var dateDeadlineButton: UIButton = {
         let button = UIButton()
-        button.setTitleColor(.blue, for: .normal)
+        button.setTitleColor(.customBlue ?? .blue, for: .normal)
         button.contentHorizontalAlignment = .left
         button.addTarget(nil, action: #selector(dateDeadlineButtonTapped), for: .touchUpInside)
         return button
@@ -149,7 +149,7 @@ final class TodoItemViewController: UIViewController {
     private lazy var selectedColorButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = cornerRadius
-        button.backgroundColor = .red
+        button.backgroundColor = .customRed ?? .red
         button.addTarget(nil, action: #selector(selectColorTap), for: .touchUpInside)
         return button
     }()
@@ -216,7 +216,6 @@ final class TodoItemViewController: UIViewController {
             
             deleteButton.isHidden = true
         } else {
-            print(settingsAndDeleteConstraints)
             NSLayoutConstraint.activate(settingsAndDeleteConstraints)
             textHeightConstraint?.constant = textViewHeight
             settingsStackView.isHidden = false
@@ -263,7 +262,7 @@ extension TodoItemViewController {
                 }
                 hexColorLabel.text = hexColor
             } else {
-                hexColorLabel.text = UIColor.primaryLabel.toHex()
+                hexColorLabel.text = UIColor.primaryLabel?.toHex()
             }
            
             textView.text = currentTodoItem.text
@@ -300,7 +299,6 @@ extension TodoItemViewController {
     // MARK: - Obj-c methods
 
     @objc func dismissTapped(sender: UIBarButtonItem) {
-        print(1)
         dismiss(animated: true, completion: nil)
     }
     
@@ -337,7 +335,7 @@ extension TodoItemViewController {
         }
         
         if let completion = dataCompletionHandler {
-            completion(currentTodoItem!)
+            completion(currentTodoItem)
         }
         dismiss(animated: true, completion: nil)
         dismissKeyboard()
@@ -491,7 +489,6 @@ extension TodoItemViewController {
             if !settingsStackView.constraints.isEmpty {
                 settingsAndDeleteConstraints = settingsStackView.constraints + deleteButton.constraints
             }
-            print(settingsStackView.constraints + deleteButton.constraints)
             NSLayoutConstraint.deactivate(settingsStackView.constraints + deleteButton.constraints)
             settingsStackView.isHidden = true
             deleteButton.isHidden = true
@@ -653,4 +650,6 @@ private let colorTextTitle = "Цвет текста"
 
 let mainDataBaseFileName = "2"
 
-private var items: [Any] = [UIImage.lowImportanceIcon, NSAttributedString(string: "нет", attributes: [NSAttributedString.Key.font: UIFont.subhead!]), UIImage.highImportanceIcon]
+private var items: [Any] = [UIImage.lowImportanceIcon,
+                            NSAttributedString(string: "нет", attributes: [NSAttributedString.Key.font: UIFont.subhead]),
+                            UIImage.highImportanceIcon]

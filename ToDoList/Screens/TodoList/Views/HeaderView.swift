@@ -1,7 +1,6 @@
 import UIKit
 
-class HeaderView: UIView {
-
+final class HeaderView: UIView {
     private lazy var doneCountLabel = UILabel()
     private lazy var showButton = UIButton()
     var doneCount = 0
@@ -17,17 +16,17 @@ class HeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(doneCount: Int = 0) {
-        self.doneCount = doneCount
-        self.doneCountLabel.text = "Выполнено - \(doneCount)"
+    func update(_ count: Int = 0) {
+        self.doneCount = count
+        self.doneCountLabel.text = doneText + String(count)
     }
     
     private func setupViews() {
-        doneCountLabel.text = "Выполнено - \(doneCount)"
+        doneCountLabel.text = doneText + String(doneCount)
         doneCountLabel.textColor = .secondaryLabel
         
-        showButton.setTitle("Показать", for: .normal)
-        showButton.setTitle("Скрыть", for: .selected)
+        showButton.setTitle(showText, for: .normal)
+        showButton.setTitle(hideText, for: .selected)
         showButton.addTarget(self, action: #selector(showButtonTap), for: .touchUpInside)
     
         showButton.setTitleColor(.systemBlue, for: .normal)
@@ -48,15 +47,17 @@ class HeaderView: UIView {
         showButton.isSelected = areDoneCellsHiden
         
         areDoneCellsHiden = !areDoneCellsHiden
-        if areDoneCellsHiden {
-            if let completion = change {
+        
+        if let completion = change {
+            if areDoneCellsHiden {
                 completion(true)
-            }
-        } else {
-            if let completion = change {
+            } else {
                 completion(false)
             }
         }
-        
     }
 }
+
+private let showText = "Показать"
+private let hideText = "Скрыть"
+private let doneText = "Выполнено - "

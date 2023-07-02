@@ -15,8 +15,8 @@ class PresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
     }
 
     func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
-        if self.animator != nil {
-            return self.animator!
+        if let animator = self.animator {
+            return animator
         }
 
         let container = transitionContext.containerView

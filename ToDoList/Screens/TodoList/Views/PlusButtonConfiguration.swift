@@ -6,7 +6,7 @@ extension TodoListViewController {
     }
     
     func configureButton(button: UIButton) -> UIButton {
-        let image = UIImage(systemName: "plus.circle.fill")?.withTintColor(.blue, renderingMode: .alwaysOriginal)
+        let image = UIImage(systemName: "plus.circle.fill")?.withTintColor(.customBlue ?? .blue, renderingMode: .alwaysOriginal)
   
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
@@ -14,7 +14,7 @@ extension TodoListViewController {
         button.setImage(image, for: .normal)
          
         button.backgroundColor = .clear
-        button.layer.shadowColor = UIColor.blue.cgColor
+        button.layer.shadowColor = UIColor.customBlue?.cgColor ?? UIColor.blue.cgColor
         button.layer.shadowOpacity = 0.3
         button.layer.shadowOffset = CGSize(width: 0, height: 3)
         button.layer.shadowRadius = 8

@@ -1,5 +1,4 @@
 import UIKit
-import TodoItem
 
 final class TodoItemViewController: UIViewController {
     // MARK: - Properties
@@ -59,7 +58,7 @@ final class TodoItemViewController: UIViewController {
         return stackView
     }()
     
-    // Label properties    
+    // Label properties
     private lazy var importanceLabel: BodyLabelView = {
         let label = BodyLabelView()
         label.text = importanceTitle
@@ -80,7 +79,7 @@ final class TodoItemViewController: UIViewController {
     
     private lazy var hexColorLabel: BodyLabelView = {
         let label = BodyLabelView()
-        label.text = UIColor.primaryLabel.toHex()
+        label.text = UIColor.primaryLabel?.toHex()
         return label
     }()
     
@@ -107,7 +106,7 @@ final class TodoItemViewController: UIViewController {
     private lazy var deleteButton: UIButton = {
         let button = UIButton()
         button.setTitle(deleteTitle, for: .normal)
-        button.setTitleColor(.red, for: .normal)
+        button.setTitleColor(.customRed ?? .red, for: .normal)
         button.setTitleColor(.tertiaryLabel, for: .disabled)
         button.layer.cornerRadius = cornerRadius
         button.backgroundColor = .secondaryBack
@@ -117,7 +116,7 @@ final class TodoItemViewController: UIViewController {
     
     private lazy var dateDeadlineButton: UIButton = {
         let button = UIButton()
-        button.setTitleColor(.blue, for: .normal)
+        button.setTitleColor(.customBlue ?? .blue, for: .normal)
         button.contentHorizontalAlignment = .left
         button.addTarget(nil, action: #selector(dateDeadlineButtonTapped), for: .touchUpInside)
         return button
@@ -138,7 +137,7 @@ final class TodoItemViewController: UIViewController {
         return datePicker
     }()
     
-    private var textHeightConstraint: NSLayoutConstraint?
+    private var textHeightConstraint: NSLayoutConstraint? = nil
     private var settingsAndDeleteConstraints: [NSLayoutConstraint] = []
 
     // SeparatorViews properties
@@ -150,7 +149,7 @@ final class TodoItemViewController: UIViewController {
     private lazy var selectedColorButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = cornerRadius
-        button.backgroundColor = .red
+        button.backgroundColor = .customRed ?? .red
         button.addTarget(nil, action: #selector(selectColorTap), for: .touchUpInside)
         return button
     }()
@@ -170,7 +169,7 @@ final class TodoItemViewController: UIViewController {
     }()
     
 //    private let fileCache = FileCache()
-    private var currentTodoItem: TodoItem?
+    private var currentTodoItem: TodoItem? = nil
     public var dataCompletionHandler: ((TodoItem?) -> Void)?
     
     // MARK: - Initializators
@@ -190,10 +189,12 @@ final class TodoItemViewController: UIViewController {
     }
     
     // MARK: - Override methods
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         setUpLandcsapeConstraints()
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -215,7 +216,6 @@ final class TodoItemViewController: UIViewController {
             
             deleteButton.isHidden = true
         } else {
-            print(settingsAndDeleteConstraints)
             NSLayoutConstraint.activate(settingsAndDeleteConstraints)
             textHeightConstraint?.constant = textViewHeight
             settingsStackView.isHidden = false
@@ -230,13 +230,13 @@ final class TodoItemViewController: UIViewController {
 
 extension TodoItemViewController {
     // MARK: - Settings views
+
     private func setUpView() {
         // Root view setup
         view.backgroundColor = .primaryBack
         
         // Navigation setup
         title = todoItemTitle
-        
         
         // TextView setup
         textView.delegate = self
@@ -262,7 +262,7 @@ extension TodoItemViewController {
                 }
                 hexColorLabel.text = hexColor
             } else {
-                hexColorLabel.text = UIColor.primaryLabel.toHex()
+                hexColorLabel.text = UIColor.primaryLabel?.toHex()
             }
            
             textView.text = currentTodoItem.text
@@ -297,8 +297,8 @@ extension TodoItemViewController {
     }
     
     // MARK: - Obj-c methods
+
     @objc func dismissTapped(sender: UIBarButtonItem) {
-        print(1)
         dismiss(animated: true, completion: nil)
     }
     
@@ -329,13 +329,13 @@ extension TodoItemViewController {
         }
         
         if currentTodoItem != nil {
-            currentTodoItem =  TodoItem(id: currentTodoItem!.id, text: textView.text, importance: importance, dateDeadline: dateDeadline, isDone: currentTodoItem!.isDone, dateСreation: currentTodoItem!.dateСreation, dateChanging: Date(), hexColor: textColor)
+            currentTodoItem = TodoItem(id: currentTodoItem!.id, text: textView.text, importance: importance, dateDeadline: dateDeadline, isDone: currentTodoItem!.isDone, dateСreation: currentTodoItem!.dateСreation, dateChanging: Date(), hexColor: textColor)
         } else {
             currentTodoItem = TodoItem(text: textView.text, importance: importance, dateDeadline: dateDeadline, hexColor: textColor)
         }
         
         if let completion = dataCompletionHandler {
-            completion(currentTodoItem!)
+            completion(currentTodoItem)
         }
         dismiss(animated: true, completion: nil)
         dismissKeyboard()
@@ -480,17 +480,15 @@ extension TodoItemViewController {
         colorBrightnessSlider.translatesAutoresizingMaskIntoConstraints = false
         colorBrightnessSlider.leadingAnchor.constraint(equalTo: settingsStackView.leadingAnchor, constant: edgeSize).isActive = true
         colorBrightnessSlider.trailingAnchor.constraint(equalTo: settingsStackView.trailingAnchor, constant: -edgeSize).isActive = true
-    
     }
     
     private func setUpLandcsapeConstraints() {
-        //Landscape constraints setup
-        if UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isLandscape == true && currentTodoItem != nil {
+        // Landscape constraints setup
+        if UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isLandscape == true, currentTodoItem != nil {
             textHeightConstraint?.constant = UIScreen.main.bounds.height - safeAreaHeights - 2 * edgeSize - (UIApplication.shared.windows.first?.windowScene?.keyWindow?.safeAreaInsets.bottom ?? 0)
             if !settingsStackView.constraints.isEmpty {
                 settingsAndDeleteConstraints = settingsStackView.constraints + deleteButton.constraints
             }
-            print(settingsStackView.constraints + deleteButton.constraints)
             NSLayoutConstraint.deactivate(settingsStackView.constraints + deleteButton.constraints)
             settingsStackView.isHidden = true
             deleteButton.isHidden = true
@@ -513,7 +511,7 @@ extension TodoItemViewController {
     }
     
     func setupLeftNavigatorButton() {
-        navigationItem.leftBarButtonItem =  UIBarButtonItem(title: cancelTitle, style: .plain, target: self, action: #selector(dismissTapped(sender: )))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: cancelTitle, style: .plain, target: self, action: #selector(dismissTapped(sender:)))
     }
     
     func setupRightNavigatorButton() {
@@ -522,25 +520,25 @@ extension TodoItemViewController {
     
     private func indexByImportance(_ importance: Importance) -> Int {
         switch importance {
-        case .unimportant:
-            return 0
-        case .ordinary:
-            return 1
-        case .important:
-            return 2
+            case .unimportant:
+                return 0
+            case .ordinary:
+                return 1
+            case .important:
+                return 2
         }
     }
     
     private func importanceByIndex(_ index: Int) -> Importance {
         switch index {
-        case 0:
-            return .unimportant
-        case 1:
-            return .ordinary
-        case 2:
-            return .important
-        default:
-            return .ordinary
+            case 0:
+                return .unimportant
+            case 1:
+                return .ordinary
+            case 2:
+                return .important
+            default:
+                return .ordinary
         }
     }
     
@@ -653,5 +651,5 @@ private let colorTextTitle = "Цвет текста"
 let mainDataBaseFileName = "2"
 
 private var items: [Any] = [UIImage.lowImportanceIcon,
-                            NSAttributedString(string: "нет", attributes: [NSAttributedString.Key.font: UIFont.subhead!]),
+                            NSAttributedString(string: "нет", attributes: [NSAttributedString.Key.font: UIFont.subhead]),
                             UIImage.highImportanceIcon]

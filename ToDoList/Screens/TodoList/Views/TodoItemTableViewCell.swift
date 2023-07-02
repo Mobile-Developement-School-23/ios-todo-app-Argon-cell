@@ -1,8 +1,7 @@
 import UIKit
-import TodoItem
 
 class TodoItemTableViewCell: UITableViewCell {
-    
+    //MARK: - Properties
     static let identifier = "todoItemCell"
     
     private let itemTextLabel = UILabel()
@@ -18,24 +17,27 @@ class TodoItemTableViewCell: UITableViewCell {
     let checkMarkButton = UIButton()
     private let chevroneButton = UIButton()
     
-    private let checkMarkImage = UIImage(systemName: "circle")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
-    private let checkHighImportanceMarkImage = UIImage(systemName: "circle")?.withTintColor(.red, renderingMode: .alwaysOriginal)
-    private let checkDoneMarkImage = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(.green, renderingMode: .alwaysOriginal)
-    private let calendarImage = UIImage(systemName: "calendar")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
-    
+    //MARK: - Inits
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
+    //MARK: - Override methods
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        checkMarkButton.setImage(.importantCircleIcon, for: .normal)
+//        checkMarkButton.isSelected = false
+//    }
+}
+
+//MARK: - Methods
+extension TodoItemTableViewCell {
     private func setupView() {
         titleAndDateDeadlineStack.axis = .vertical
         dateDeadlineStack.axis = .horizontal
@@ -60,8 +62,11 @@ class TodoItemTableViewCell: UITableViewCell {
         
         dateDeadlineStack.spacing = 2
             
-        chevroneButton.imageView?.image = UIImage(named: "ChevronRight")
-         
+        chevroneButton.setImage(.chevroneRightIcon, for: .normal)
+        
+//        checkMarkButton.setImage(.undoneCircleIcon, for: .normal)
+//        checkMarkButton.setImage(.greenCheckMarkCircleIcon, for: .selected)
+//        
         addSubviews()
         setupLayout()
     }
@@ -98,7 +103,7 @@ class TodoItemTableViewCell: UITableViewCell {
         chevroneButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -edgeSize).isActive = true
         chevroneButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         chevroneButton.widthAnchor.constraint(equalToConstant: 7).isActive = true
-        chevroneButton.heightAnchor.constraint(equalToConstant: 11).isActive = true
+        chevroneButton.heightAnchor.constraint(equalToConstant: 9).isActive = true
         
         importanceImageView.translatesAutoresizingMaskIntoConstraints = false
         importanceImageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
@@ -131,31 +136,30 @@ class TodoItemTableViewCell: UITableViewCell {
             
             if let dateDeadline = item.dateDeadline {
                 dateDeadlineLabel.text = dateDeadline.toString(with: "d MMMM")
-                calendarImageView.image = calendarImage
+                calendarImageView.image = .calendarIcon
                 dateDeadlineStack.isHidden = false
             } else {
                 dateDeadlineStack.isHidden = true
             }
-        
-            chevroneButton.isHidden = false
-            chevroneButton.setImage(UIImage(named: "ChevronRight"), for: .normal)
             
+            chevroneButton.isHidden = false
             checkMarkButton.isHidden = false
             importanceImageView.isHidden = false
+        
             switch item.importance {
             case .important:
-                importanceImageView.image = UIImage(named: "HighImportance")
-                checkMarkButton.setImage(checkHighImportanceMarkImage, for: .normal)
+                importanceImageView.image = .highImportanceIcon
+                checkMarkButton.setImage(.importantCircleIcon, for: .normal)
             case .unimportant:
-                importanceImageView.image = UIImage(named: "LowImportance")
-                checkMarkButton.setImage(checkMarkImage, for: .normal)
+                importanceImageView.image = .lowImportanceIcon
+                checkMarkButton.setImage(.undoneCircleIcon, for: .normal)
             case .ordinary:
                 importanceImageView.isHidden = true
-                checkMarkButton.setImage(checkMarkImage, for: .normal)
+                checkMarkButton.setImage(.undoneCircleIcon, for: .normal)
             }
             
             if item.isDone {
-                checkMarkButton.setImage(checkDoneMarkImage, for: .normal)
+                checkMarkButton.setImage(.greenCheckMarkCircleIcon, for: .normal)
                 itemTextLabel.attributedText = NSAttributedString(string: item.text, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
                 itemTextLabel.textColor = .secondaryLabel
             } else {
@@ -163,5 +167,4 @@ class TodoItemTableViewCell: UITableViewCell {
             }
         }
     }
-    
 }

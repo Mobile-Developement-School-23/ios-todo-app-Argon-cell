@@ -1,6 +1,7 @@
 import UIKit
 import Foundation
 
+
 class PresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
     var animator: UIViewImplicitlyAnimating?
     
@@ -14,8 +15,8 @@ class PresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
     }
 
     func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
-        if self.animator != nil {
-            return self.animator!
+        if let animator = self.animator {
+            return animator
         }
 
         let container = transitionContext.containerView
@@ -104,6 +105,7 @@ class DismissTransition: NSObject, UIViewControllerAnimatedTransitioning {
     }
     
 }
+
 
 extension TodoListViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {

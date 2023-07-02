@@ -1,5 +1,4 @@
 import UIKit
-import TodoItem
 
 extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -9,7 +8,7 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoItemTableViewCell.identifier, for: indexPath) as? TodoItemTableViewCell else { fatalError("Ошибка в создании ячейки") }
         cell.configureCell(todoItems[indexPath.row])
-        cell.checkMarkButton.addTarget(self, action: #selector(checkMarkTap), for: .touchUpInside)
+        cell.checkMarkButton.addTarget(self, action: #selector(self.checkMarkTap), for: .touchUpInside)
         cell.checkMarkButton.tag = indexPath.row
         return cell
     }
@@ -18,14 +17,13 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         if self.todoItems[indexPath.row].dateСreation != .distantPast {
             let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, handler in
                 self.todoItems.remove(at: indexPath.row)
-                let filteredTodoItemsCount = self.todoItems.filter { $0.isDone }.count
-                self.headerView.update(doneCount: filteredTodoItemsCount == 0 ? self.doneTodoItems.count : filteredTodoItemsCount)
+                self.updateCount()
                 self.makeSave()
                 tableView.reloadData()
                 handler(true)
             }
-            deleteAction.image = UIImage(systemName: "trash.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-            deleteAction.backgroundColor = .red
+            deleteAction.image = .whiteTrashIcon
+            deleteAction.backgroundColor = .customRed ?? .red
                     
             let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
             return configuration
@@ -42,8 +40,8 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
                 tableView.reloadData()
                 handler(true)
             }
-            doneAction.image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-            doneAction.backgroundColor = .green
+            doneAction.image = .whiteCheckMarkCircleIcon
+            doneAction.backgroundColor = .customGreen ?? .green
             
             let configuration = UISwipeActionsConfiguration(actions: [doneAction])
             return configuration
@@ -70,7 +68,7 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
 
         vc.dataCompletionHandler = { [weak self] item in
             guard let self = self else { return }
-            
+               
             if currentTodoItem != nil {
                 if let item = item {
                     self.todoItems[indexPath.row] = item
@@ -83,12 +81,12 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
             self.todoItems.sort(by: { $0.dateСreation > $1.dateСreation })
+            self.updateCount()
             self.makeSave()
-            
-            let filteredTodoItemsCount = self.todoItems.filter { $0.isDone }.count
-            self.headerView.update(doneCount: filteredTodoItemsCount == 0 ? self.doneTodoItems.count : filteredTodoItemsCount)
+
             tableView.reloadData()
         }
+        
         tableView.deselectRow(at: indexPath, animated: true)
         present(navigationController, animated: true, completion: nil)
     }
@@ -100,18 +98,16 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
             if todoItems[index].isDone {
                 doneTodoItems.append(todoItems[index])
                 todoItems.remove(at: index)
-                headerView.update(doneCount: doneTodoItems.count)
+                headerView.update(doneTodoItems.count)
             }
         } else {
-            headerView.update(doneCount: todoItems.filter { $0.isDone }.count)
+            headerView.update(todoItems.filter { $0.isDone }.count)
         }
     }
     
     @objc func checkMarkTap(sender: UIButton) {
-        
         self.itemDoneAction(sender.tag)
-            self.makeSave()
-            tableView.reloadData()
-        
+        self.makeSave()
+        self.tableView.reloadData()
     }
 }

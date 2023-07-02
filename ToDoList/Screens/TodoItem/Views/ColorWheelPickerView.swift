@@ -20,7 +20,7 @@ class ColorPickerView: UIView {
             UIColor(red: 1, green: 0, blue: 0, alpha: 1).cgColor,
             UIColor(red: 0, green: 1, blue: 0, alpha: 1).cgColor,
             UIColor(red: 0, green: 0, blue: 1, alpha: 1).cgColor,
-            UIColor(red: 1, green: 0, blue: 0, alpha: 1).cgColor
+            UIColor(red: 1, green: 0, blue: 0, alpha: 1).cgColor,
         ]
         viewLayer.startPoint = CGPoint(x: 0, y: 0.5)
         viewLayer.endPoint = CGPoint(x: 1, y: 0.5)

@@ -7,7 +7,7 @@ extension Date {
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: self)
     }
-    
+
     static func getNextDayDate() -> Date {
         return Calendar.current.date(byAdding: .day, value: 1, to: Date())!
     }

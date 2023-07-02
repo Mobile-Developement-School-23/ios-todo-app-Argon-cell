@@ -1,25 +1,23 @@
 import UIKit
 
 extension UIColor {
-    static var primaryBack: UIColor { return UIColor(named: "PrimaryBack")! }
-    static var secondaryBack: UIColor { return UIColor(named: "SecondaryBack")! }
-    static var iosPrimaryBack: UIColor { return UIColor(named: "iOSPrimaryBack")! }
-    static var elevatedBack: UIColor { return UIColor(named: "ElevatedBack")! }
+    static var primaryBack: UIColor? { return UIColor(named: "PrimaryBack") }
+    static var secondaryBack: UIColor? { return UIColor(named: "SecondaryBack") }
+    static var iosPrimaryBack: UIColor? { return UIColor(named: "iOSPrimaryBack") }
+    static var elevatedBack: UIColor? { return UIColor(named: "ElevatedBack") }
     
-    static var separatorSupport: UIColor { return UIColor(named: "SeparatorSupport")! }
-    static var overlaySupport: UIColor { return UIColor(named: "OverlaySupport")! }
+    static var separatorSupport: UIColor? { return UIColor(named: "SeparatorSupport") }
+    static var overlaySupport: UIColor? { return UIColor(named: "OverlaySupport") }
     
-    static var tertiaryLabel: UIColor { return UIColor(named: "TertiaryLabel")! }
-    static var primaryLabel: UIColor { return UIColor(named: "PrimaryLabel")! }
+    static var tertiaryLabel: UIColor? { return UIColor(named: "TertiaryLabel") }
+    static var primaryLabel: UIColor? { return UIColor(named: "PrimaryLabel") }
     
-    static var green: UIColor { return UIColor(named: "Green")! }
-    static var red: UIColor { return UIColor(named: "Red")! }
-    static var blue: UIColor { return UIColor(named: "Blue")! }
+    static var customGreen: UIColor? { return UIColor(named: "Green") }
+    static var customRed: UIColor? { return UIColor(named: "Red") }
+    static var customBlue: UIColor? { return UIColor(named: "Blue") }
     
     func toHex() -> String? {
-        guard let components = cgColor.components else {
-            return nil
-        }
+        guard let components = cgColor.components else { return nil }
            
         let r = Float(components[0])
         let g = Float(components[1])
@@ -36,9 +34,7 @@ extension UIColor {
             hexString.remove(at: hexString.startIndex)
         }
         
-        guard hexString.count == 6 else {
-            return nil
-        }
+        guard hexString.count == 6 else { return nil }
         
         var rgbValue: UInt64 = 0
         Scanner(string: hexString).scanHexInt64(&rgbValue)

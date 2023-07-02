@@ -16,7 +16,7 @@ class TextView: UITextView {
         self.font = UIFont.body
         self.autocorrectionType = .no
         self.layer.cornerRadius = 16
-        self.layer.backgroundColor = UIColor.secondaryBack.cgColor
+        self.layer.backgroundColor = UIColor.secondaryBack?.cgColor
         
         self.isScrollEnabled = false
         self.textContainerInset = UIEdgeInsets.init(top: 16, left: 11, bottom: 16, right: 16)
@@ -24,6 +24,8 @@ class TextView: UITextView {
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        layer.backgroundColor = UIColor.secondaryBack.cgColor
+        layer.backgroundColor = UIColor.secondaryBack?.cgColor
     }
+    
+
 }

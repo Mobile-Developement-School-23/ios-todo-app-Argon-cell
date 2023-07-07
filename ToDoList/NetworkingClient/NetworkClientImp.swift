@@ -16,7 +16,7 @@ struct NetworkClientImp: NetworkClient {
     func processRetryListRequest(request: HTTPRequest, tryCount: Int, completion: @escaping (Result<([TodoItem], Int), Error>) -> Void) -> Cancellable? {
         let delay = min(Double(Constants.minDelay * pow(1.5, Double(tryCount))), Constants.maxDelay)
         let totalDelay = delay * (1.0 + Constants.jitter)
-        debugPrint(tryCount)
+
         return processListRequest(request: request) { result in
             switch result {
             case .success(let success):
@@ -49,7 +49,6 @@ struct NetworkClientImp: NetworkClient {
                         }
                     }
                 } else {
-                    debugPrint(tryCount + 1)
                     let updatedRequest = HTTPRequest(route: "\(NetworkServiceImp.Constants.baseurl)/list", headers: request.headers)
                     processListRequest(request: updatedRequest, completion: completion)
                 }
@@ -60,7 +59,7 @@ struct NetworkClientImp: NetworkClient {
     func processRetryItemRequest(request: HTTPRequest, tryCount: Int, completion: @escaping (Result<TodoItem, Error>) -> Void) -> Cancellable? {
         let delay = min(Double(Constants.minDelay * pow(1.5, Double(tryCount))), Constants.maxDelay)
         let totalDelay = delay * (1.0 + Constants.jitter)
-        debugPrint(tryCount)
+
         return processItemRequest(request: request) { result in
             switch result {
             case .success(let success):
@@ -251,13 +250,9 @@ struct NetworkClientImp: NetworkClient {
     // MARK: - Private
 
     private func createUrlRequest(from request: HTTPRequest) throws -> URLRequest {
-        guard var urlComponents = URLComponents(string: request.route) else {
+        guard let urlComponents = URLComponents(string: request.route) else {
             throw HTTPError.missingURL
         }
-
-//        urlComponents.percentEncodedQuery = urlComponents.percentEncodedQuery?.replacingOccurrences(
-//            of: Constants.replaceOccurrencesOf, with: Constants.replacingOccurrencesWith
-//        )
 
         guard let url = urlComponents.url else {
             throw HTTPError.missingURLComponents
@@ -294,7 +289,7 @@ extension NetworkClientImp {
         static let maxDelay: Double = 120.0
         static let minDelay: Double = 2.0
         static let maxAttempts: Int = 3
-//        static let requestListAfterAttempts = HTTPRequest(route: "\(Constants.baseurl)/list", headers: [Constants.authorizationHeader: "Bearer \(token ?? "")"])
+
         static var jitter: Double {
             get {
                 return Double.random(in: jitterMinBound...jitterMaxnBound)

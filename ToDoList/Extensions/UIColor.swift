@@ -18,7 +18,6 @@ extension UIColor {
     static var customRed: UIColor? { return UIColor(named: "Red") }
     static var customBlue: UIColor? { return UIColor(named: "Blue") }
     
-    
     func toHex() -> String? {
         guard let components = cgColor.components else { return nil }
            

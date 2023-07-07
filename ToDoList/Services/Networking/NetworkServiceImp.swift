@@ -6,8 +6,7 @@ final class NetworkServiceImp: NetworkService {
     private let networkClient: NetworkClient
     private var token: String?
     private var revision: RevisionStorage = RevisionStorage()
-//    private var requests: [Cancellable?] = []
-    
+
     init(networkClient: NetworkClient, token: String?) {
         self.networkClient = networkClient
         self.token = token
@@ -16,7 +15,6 @@ final class NetworkServiceImp: NetworkService {
     // MARK: - Public
     func checkToken(completion: @escaping (Result<([TodoItem], Revision), Error>) -> Void) {
         networkClient.processListRequest(request: createGetListRequest(), completion: completion)
-//        requests.append(request)
     }
     
     func updateToken(token: String?) {
@@ -45,20 +43,19 @@ final class NetworkServiceImp: NetworkService {
     }
     
     func getTodoItem(with id: String, completion: @escaping (Result<TodoItem, Error>) -> Void) {
-        networkClient.processItemRequest(request: createGetTodoItemRequest(with: id), completion: completion)
+        networkClient.processRetryItemRequest(request: createGetTodoItemRequest(with: id), tryCount: 0, completion: completion)
     }
     
     func createTodoItem(with id: String, item: TodoItem, completion: @escaping (Result<TodoItem, Error>) -> Void) {
-        debugPrint(revision.getCurrentRevision())
-        networkClient.processItemRequest(request: createCreateItemRequest(with: id, item: item), completion: completion)
+        networkClient.processRetryItemRequest(request: createCreateItemRequest(with: id, item: item), tryCount: 0, completion: completion)
     }
     
     func updateTodoItem(with id: String, item: TodoItem, completion: @escaping (Result<TodoItem, Error>) -> Void) {
-        networkClient.processItemRequest(request: createUpdateItemRequest(with: id, item: item), completion: completion)
+        networkClient.processRetryItemRequest(request: createUpdateItemRequest(with: id, item: item), tryCount: 0, completion: completion)
     }
     
     func deleteTodoItem(with id: String, completion: @escaping (Result<TodoItem, Error>) -> Void) {
-        networkClient.processItemRequest(request: createDeleteItemRequest(id), completion: completion)
+        networkClient.processRetryItemRequest(request: createDeleteItemRequest(id), tryCount: 0, completion: completion)
     }
     
     // MARK: - Private

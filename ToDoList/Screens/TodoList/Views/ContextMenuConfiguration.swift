@@ -40,11 +40,6 @@ extension TodoListViewController {
         vc.setUserInteractionDisabled()
         show(vc, sender: nil)
     }
-    
-//    func updateCount() {
-//        let filteredTodoItemsCount = todoItems.filter { $0.isDone }.count
-//        headerView.update(filteredTodoItemsCount == 0 ? doneTodoItems.count : filteredTodoItemsCount)
-//    }
 }
 
 private let makeDoneActionText = "Make done"

@@ -81,7 +81,7 @@ extension FileCacheImp {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileCacheErrors.directoryNotFound }
 
         let pathWithFileName = documentDirectory.appendingPathComponent(name + FileFormat.json.rawValue)
-        debugPrint(pathWithFileName)
+        debugPrint("Путь файла - " + pathWithFileName.absoluteString)
         
         guard let data = try? Data(contentsOf: pathWithFileName) else { throw FileCacheErrors.pathToFileNotFound }
         guard let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [Any] else { throw FileCacheErrors.jSONConvertationError }
@@ -143,25 +143,6 @@ extension FileCacheImp {
             try joinedString.write(to: pathWithFileName, atomically: true, encoding: .utf8)
         } catch {
             throw FileCacheErrors.pathToFileNotFound
-        }
-    }
-}
-
-extension FileCacheImp {
-    func saveArrayToJSON(todoItems: [TodoItem], to file: String) {
-        self.todoItems = Dictionary(uniqueKeysWithValues: todoItems.map({($0.id, $0)}))
-        do {
-            try self.saveToJSON(file: file)
-        } catch FileCacheErrors.directoryNotFound {
-            debugPrint(FileCacheErrors.directoryNotFound.rawValue)
-        } catch FileCacheErrors.jSONConvertationError {
-            debugPrint(FileCacheErrors.jSONConvertationError.rawValue)
-        } catch FileCacheErrors.pathToFileNotFound {
-            debugPrint(FileCacheErrors.pathToFileNotFound.rawValue)
-        } catch FileCacheErrors.writeFileError {
-            debugPrint(FileCacheErrors.writeFileError.rawValue)
-        } catch {
-            debugPrint("Другая ошибка при сохранении файла")
         }
     }
 }

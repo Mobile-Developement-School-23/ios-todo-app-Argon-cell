@@ -40,7 +40,6 @@ extension TodoItemTableViewCell {
         contentView.backgroundColor = .secondaryBack
         separatorInset = UIEdgeInsets(top: 0, left: checkMarkButton.bounds.width + 54, bottom: 0, right: 0)
     
-        
         itemTextLabel.font = .body
         itemTextLabel.textColor = .primaryLabel
         itemTextLabel.numberOfLines = 3
@@ -60,9 +59,6 @@ extension TodoItemTableViewCell {
             
         chevroneButton.setImage(.chevroneRightIcon, for: .normal)
         
-//        checkMarkButton.setImage(.undoneCircleIcon, for: .normal)
-//        checkMarkButton.setImage(.greenCheckMarkCircleIcon, for: .selected)
-//        
         addSubviews()
         setupLayout()
     }

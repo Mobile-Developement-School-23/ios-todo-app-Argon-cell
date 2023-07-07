@@ -51,7 +51,7 @@ final class HeaderView: UIView {
         
         showButton.setAttributedTitle(NSAttributedString(string: showText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.customBlue ?? .blue, NSAttributedString.Key.font: UIFont.body ?? UIFont.preferredFont(forTextStyle: .body)]), for: .normal)
         showButton.setAttributedTitle(NSAttributedString(string: hideText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.customBlue ?? .blue, NSAttributedString.Key.font: UIFont.body ?? UIFont.preferredFont(forTextStyle: .body)]), for: .selected)
-//        showButton.contentMode = .scaleAspectFit
+
         showButton.addTarget(self, action: #selector(showButtonTap), for: .touchUpInside)
     
         showButton.setTitleColor(.customBlue, for: .normal)
@@ -61,33 +61,15 @@ final class HeaderView: UIView {
         mainStack.addArrangedSubview(appStatusLabel)
         mainStack.addArrangedSubview(doneCountLabel)
         mainStack.addArrangedSubview(showButton)
-//        addSubview(appStatusLabel)
-//        addSubview(doneCountLabel)
-//        addSubview(showButton)
 
         mainStack.translatesAutoresizingMaskIntoConstraints = false
         mainStack.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 2 * edgeSize).isActive = true
         mainStack.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -2 * edgeSize).isActive = true
         mainStack.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        
-        
-//        doneCountLabel.translatesAutoresizingMaskIntoConstraints = false
-//        doneCountLabel.leftAnchor.constraint(equalTo: self.appStatusLabel.rightAnchor, constant: edgeSize).isActive = true
-//        doneCountLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-//
-//        appStatusLabel.translatesAutoresizingMaskIntoConstraints = false
-//        appStatusLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 2 * edgeSize).isActive = true
-//        appStatusLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-//
-//        appStatusLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-//        appStatusLabel.widthAnchor.constraint(equalToConstant: 10).isActive = true
-//        appStatusLabel.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        
+                
         showButton.translatesAutoresizingMaskIntoConstraints = false
-//        showButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        showButton.widthAnchor.constraint(equalToConstant: 10).isActive = true
+        
         showButton.rightAnchor.constraint(equalTo: self.mainStack.rightAnchor).isActive = true
-//        showButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
     
     @objc func showButtonTap() {

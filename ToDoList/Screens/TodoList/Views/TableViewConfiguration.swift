@@ -94,7 +94,6 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         present(navigationController, animated: true, completion: nil)
     }
     
-
     @objc func checkMarkTap(sender: UIButton) {
         var item = todoItems[sender.tag]
         item.isDone = !item.isDone

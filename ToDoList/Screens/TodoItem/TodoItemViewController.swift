@@ -168,7 +168,6 @@ final class TodoItemViewController: UIViewController {
         return slider
     }()
     
-//    private let fileCache = FileCache()
     private var currentTodoItem: TodoItem?
     public var dataCompletionHandler: ((TodoItem?) -> Void)?
     
@@ -288,7 +287,7 @@ extension TodoItemViewController {
         
             dateDeadlineButton.isHidden = true
             deleteButton.isEnabled = false
-//            saveButton.isEnabled = false
+            
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
                 

@@ -29,13 +29,6 @@ class TodoListViewController: UIViewController {
         return button
     }()
     
-    lazy var errorLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Ошибка"
-        label.textColor = .customSecondaryLabel
-        return label
-    }()
-    
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: CGRect(), style: .insetGrouped)
         tableView.register(TodoItemTableViewCell.self, forCellReuseIdentifier: TodoItemTableViewCell.identifier)
@@ -47,7 +40,6 @@ class TodoListViewController: UIViewController {
     
     lazy var loadingView: UIActivityIndicatorView = {
         let activityIndicatorView = UIActivityIndicatorView(style: .large)
-//        activityIndicatorView.layer.opacity = 0.5
         activityIndicatorView.backgroundColor = .clear
         return activityIndicatorView
     }()
@@ -94,8 +86,6 @@ class TodoListViewController: UIViewController {
         navigationItem.rightBarButtonItem =  UIBarButtonItem(customView: menuBtn)
         view.backgroundColor = .iosPrimaryBack
         
-        errorLabel.isHidden = true
-
         configureDataTable(dataManagerService.loadListLocally())
         
         dataManagerService.getListNetwork { [weak self] result in
@@ -104,7 +94,6 @@ class TodoListViewController: UIViewController {
                 switch result {
                     case .success:
                         self.headerView.hideNetworkSyncErrorLabel()
-//                        self.configureDataTable(updatedItems)
                         self.dataManagerService.updateListNetwork { [weak self] result in
                             guard let self = self else { return }
                             DispatchQueue.main.async {
@@ -112,28 +101,15 @@ class TodoListViewController: UIViewController {
                                     case .success(let updatedMergedItems):
                                         self.configureDataTable(updatedMergedItems)
                                     case .failure:
-                                        self.showError("Данные не синхронизироались с сервером")
+                                        break
                                 }
                             }
                         }
                     case .failure:
-//                        self.showError("Оффлайн режим")
                         self.headerView.showNetworkSyncErrorLabel()
                 }
             }
         }
-        
-//        dataManagerService.updateListNetwork { [weak self] result in
-//            guard let self = self else { return }
-//            DispatchQueue.main.async {
-//                switch result {
-//                    case .success(let updatedItems):
-//                        self.configureDataTable(updatedItems)
-//                    case .failure:
-//                        self.showError("Данные не синхронизироались с сервером")
-//                }
-//            }
-//        }
         
         dataManagerService.dataDelegate = { preparedItems in
             DispatchQueue.main.async {
@@ -157,12 +133,10 @@ class TodoListViewController: UIViewController {
         addSubViews()
         setupLayout()
         
-        loadingView.backgroundColor = .primaryBack
     }
     
     private func addSubViews() {
         view.addSubview(tableView)
-        view.addSubview(errorLabel)
         view.addSubview(loadingView)
         view.addSubview(plusButton)
     }
@@ -204,19 +178,7 @@ class TodoListViewController: UIViewController {
         plusButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         plusButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         plusButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -edgeSize).isActive = true
-        
-        errorLabel.translatesAutoresizingMaskIntoConstraints = false
-        errorLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        errorLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: edgeSize).isActive = true
-        errorLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -edgeSize).isActive = true
-        errorLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -1.5 * edgeSize).isActive = true
-    }
-
-    func showError(_ string: String) {
-//        plusButton.isHidden = true
-        loadingView.stopAnimating()
-        errorLabel.isHidden = false
-        errorLabel.text = string
+    
     }
     
     func startLoading() {
@@ -249,7 +211,6 @@ class TodoListViewController: UIViewController {
                 self.dataManagerService.addElementLocally(todoItem)
                 self.startLoading()
                 self.dataManagerService.addElementNetwork(todoItem)
-
             }
         }
         vc.setupNavigatorButtons()
@@ -285,13 +246,6 @@ extension TodoListViewController {
         }
         self.todoItems = todoItems.sorted(by: { $0.dateСreation > $1.dateСreation })
         doneTodoItems = []
-    }
-    
-    func makeSave() {
-        var todoItemsToSave = todoItems + doneTodoItems
-        todoItemsToSave.sort(by: { $0.dateСreation > $1.dateСreation })
-        todoItemsToSave.removeLast()
-//        fileCache.saveArrayToJSON(todoItems: todoItemsToSave, to: mainDataBaseFileName)
     }
 }
 

@@ -13,9 +13,7 @@ protocol DataManager: AnyObject {
     @discardableResult
     func updateElementLocally(_ item: TodoItem) -> [TodoItem]
     
-//    func saveListLocally(_ items: [TodoItem])
     func loadListLocally() -> [TodoItem]
-//    func setListLocally(_ items: [TodoItem])
     func storageIsDirty() -> Bool
     
     // MARK: - Network methods

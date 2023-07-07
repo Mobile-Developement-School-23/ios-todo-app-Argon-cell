@@ -25,11 +25,7 @@ class DataManagerImp: DataManager {
         try? storage.save(to: mainDataBaseFileName)
         return storage.getItems()
     }
-    
-//    func saveListLocally(_ items: [TodoItem]) {
-//
-//    }
-    
+        
     func loadListLocally() -> [TodoItem] {
         try? storage.load(from: mainDataBaseFileName)
         if let dataDelegate = self.dataDelegate {
@@ -37,10 +33,6 @@ class DataManagerImp: DataManager {
         }
         return storage.getItems()
     }
-    
-//    func setListLocally(_ items: [TodoItem]) {
-//
-//    }
     
     func getListNetwork(completion: @escaping (Result<[TodoItem], Error>) -> Void) {
         network.getList { [weak self] result in
@@ -181,7 +173,6 @@ class DataManagerImp: DataManager {
     func storageIsDirty() -> Bool {
         return storage.isDirty
     }
-    
     
     func checkToken(_ clouser: @escaping ((Bool) -> Void)) {
         network.checkToken { result in

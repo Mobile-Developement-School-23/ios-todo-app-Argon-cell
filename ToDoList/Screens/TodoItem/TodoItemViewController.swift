@@ -85,7 +85,7 @@ final class TodoItemViewController: UIViewController {
     
     // SegmentControl properties
     private lazy var importanceSegmentControl: UISegmentedControl = {
-        let segmentControl = UISegmentedControl(items: items)
+        let segmentControl = UISegmentedControl(items: segmentControlItems)
         segmentControl.selectedSegmentTintColor = .elevatedBack
         segmentControl.backgroundColor = .overlaySupport
         return segmentControl
@@ -137,7 +137,7 @@ final class TodoItemViewController: UIViewController {
         return datePicker
     }()
     
-    private var textHeightConstraint: NSLayoutConstraint? = nil
+    private var textHeightConstraint: NSLayoutConstraint?
     private var settingsAndDeleteConstraints: [NSLayoutConstraint] = []
 
     // SeparatorViews properties
@@ -169,7 +169,7 @@ final class TodoItemViewController: UIViewController {
     }()
     
 //    private let fileCache = FileCache()
-    private var currentTodoItem: TodoItem? = nil
+    private var currentTodoItem: TodoItem?
     public var dataCompletionHandler: ((TodoItem?) -> Void)?
     
     // MARK: - Initializators
@@ -281,7 +281,7 @@ extension TodoItemViewController {
     
         } else {
             textView.text = placeholderTitleForTextView
-            textView.textColor = .secondaryLabel
+            textView.textColor = .customSecondaryLabel
             
             selectedColorButton.backgroundColor = .primaryLabel
             importanceSegmentControl.selectedSegmentIndex = 1
@@ -520,25 +520,25 @@ extension TodoItemViewController {
     
     private func indexByImportance(_ importance: Importance) -> Int {
         switch importance {
-            case .unimportant:
-                return 0
-            case .ordinary:
-                return 1
-            case .important:
-                return 2
+        case .unimportant:
+            return 0
+        case .ordinary:
+            return 1
+        case .important:
+            return 2
         }
     }
     
     private func importanceByIndex(_ index: Int) -> Importance {
         switch index {
-            case 0:
-                return .unimportant
-            case 1:
-                return .ordinary
-            case 2:
-                return .important
-            default:
-                return .ordinary
+        case 0:
+            return .unimportant
+        case 1:
+            return .ordinary
+        case 2:
+            return .important
+        default:
+            return .ordinary
         }
     }
     
@@ -595,7 +595,7 @@ extension TodoItemViewController: UITextViewDelegate {
     public func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         if textView.text == "" {
             textView.text = placeholderTitleForTextView
-            textView.textColor = .secondaryLabel
+            textView.textColor = .customSecondaryLabel
         }
         return true
     }
@@ -617,7 +617,7 @@ extension TodoItemViewController: ColorPickerDelegate {
         if textView.text != placeholderTitleForTextView && textView.text != "" {
             textView.textColor = color
         } else {
-            textView.textColor = .secondaryLabel
+            textView.textColor = .customSecondaryLabel
         }
     }
 }
@@ -636,7 +636,7 @@ let edgeSize: CGFloat = 16
 private let verticalStackEdgeSize: CGFloat = 12.5
 private let settingsStackViewSpacing: CGFloat = 11
 
-private var placeholderTitleForTextView = "Что надо сделать?"
+private let placeholderTitleForTextView = "Что надо сделать?"
 
 private let todoItemTitle = "Дело"
 
@@ -650,6 +650,7 @@ private let colorTextTitle = "Цвет текста"
 
 let mainDataBaseFileName = "2"
 
-private var items: [Any] = [UIImage.lowImportanceIcon,
-                            NSAttributedString(string: "нет", attributes: [NSAttributedString.Key.font: UIFont.subhead]),
-                            UIImage.highImportanceIcon]
+private let segmentControlItems: [Any] = [UIImage.lowImportanceIcon ?? UIImage(),
+                                          NSAttributedString(string: "нет",
+                                                             attributes: [NSAttributedString.Key.font: UIFont.subhead ?? .preferredFont(forTextStyle: .subheadline)]),
+                                          UIImage.highImportanceIcon ?? UIImage()]

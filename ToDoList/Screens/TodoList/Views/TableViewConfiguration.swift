@@ -15,11 +15,11 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if self.todoItems[indexPath.row].dateСreation != .distantPast {
-            let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, handler in
-                self.todoItems.remove(at: indexPath.row)
-                self.updateCount()
-                self.makeSave()
-                tableView.reloadData()
+            let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, handler in
+                guard let self = self else { return }
+                self.dataManagerService.deleteElementLocally(self.todoItems[indexPath.row])
+                self.startLoading()
+                self.dataManagerService.deleteElementNetwork(self.todoItems[indexPath.row])
                 handler(true)
             }
             deleteAction.image = .whiteTrashIcon
@@ -34,10 +34,13 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if self.todoItems[indexPath.row].dateСreation != .distantPast {
-            let doneAction = UIContextualAction(style: .normal, title: nil) { _, _, handler in
-                self.itemDoneAction(indexPath.row)
-                self.makeSave()
-                tableView.reloadData()
+            let doneAction = UIContextualAction(style: .normal, title: nil) { [weak self] _, _, handler in
+                guard let self = self else { return }
+                var item = self.todoItems[indexPath.row]
+                item.isDone = !item.isDone
+                self.dataManagerService.updateElementLocally(item)
+                self.startLoading()
+                self.dataManagerService.updateElementNetwork(item)
                 handler(true)
             }
             doneAction.image = .whiteCheckMarkCircleIcon
@@ -63,51 +66,40 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         vc.setupNavigatorButtons()
         
         let navigationController = UINavigationController(rootViewController: vc)
-        navigationController.modalPresentationStyle = .custom
-        navigationController.transitioningDelegate = self
 
         vc.dataCompletionHandler = { [weak self] item in
             guard let self = self else { return }
                
             if currentTodoItem != nil {
                 if let item = item {
-                    self.todoItems[indexPath.row] = item
+                    self.dataManagerService.updateElementLocally(item)
+                    self.startLoading()
+                    self.dataManagerService.updateElementNetwork(item)
                 } else {
-                    self.todoItems.remove(at: indexPath.row)
+                    let item = self.todoItems[indexPath.row]
+                    self.dataManagerService.deleteElementLocally(item)
+                    self.startLoading()
+                    self.dataManagerService.deleteElementNetwork(item)
                 }
             } else {
                 if let item = item {
-                    self.todoItems.append(item)
+                    self.dataManagerService.addElementLocally(item)
+                    self.startLoading()
+                    self.dataManagerService.addElementNetwork(item)
                 }
             }
-            self.todoItems.sort(by: { $0.dateСreation > $1.dateСreation })
-            self.updateCount()
-            self.makeSave()
-
-            tableView.reloadData()
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
         present(navigationController, animated: true, completion: nil)
     }
     
-    func itemDoneAction(_ index: Int) {
-        todoItems[index].isDone = !todoItems[index].isDone
-    
-        if headerView.areDoneCellsHiden {
-            if todoItems[index].isDone {
-                doneTodoItems.append(todoItems[index])
-                todoItems.remove(at: index)
-                headerView.update(doneTodoItems.count)
-            }
-        } else {
-            headerView.update(todoItems.filter { $0.isDone }.count)
-        }
-    }
-    
+
     @objc func checkMarkTap(sender: UIButton) {
-        self.itemDoneAction(sender.tag)
-        self.makeSave()
-        self.tableView.reloadData()
+        var item = todoItems[sender.tag]
+        item.isDone = !item.isDone
+        self.dataManagerService.updateElementLocally(item)
+        self.startLoading()
+        self.dataManagerService.updateElementNetwork(item)
     }
 }

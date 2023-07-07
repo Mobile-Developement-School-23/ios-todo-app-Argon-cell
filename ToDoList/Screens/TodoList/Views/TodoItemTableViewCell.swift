@@ -1,7 +1,7 @@
 import UIKit
 
 class TodoItemTableViewCell: UITableViewCell {
-    //MARK: - Properties
+    // MARK: - Properties
     static let identifier = "todoItemCell"
     
     private let itemTextLabel = UILabel()
@@ -17,7 +17,7 @@ class TodoItemTableViewCell: UITableViewCell {
     let checkMarkButton = UIButton()
     private let chevroneButton = UIButton()
     
-    //MARK: - Inits
+    // MARK: - Inits
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -27,23 +27,19 @@ class TodoItemTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    //MARK: - Override methods
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        checkMarkButton.setImage(.importantCircleIcon, for: .normal)
-//        checkMarkButton.isSelected = false
-//    }
 }
 
-//MARK: - Methods
+// MARK: - Methods
 extension TodoItemTableViewCell {
     private func setupView() {
         titleAndDateDeadlineStack.axis = .vertical
+        titleAndDateDeadlineStack.spacing = 2
         dateDeadlineStack.axis = .horizontal
+        dateDeadlineStack.alignment = .center
         
         contentView.backgroundColor = .secondaryBack
         separatorInset = UIEdgeInsets(top: 0, left: checkMarkButton.bounds.width + 54, bottom: 0, right: 0)
+    
         
         itemTextLabel.font = .body
         itemTextLabel.textColor = .primaryLabel
@@ -54,11 +50,11 @@ extension TodoItemTableViewCell {
         checkMarkButton.contentHorizontalAlignment = .fill
         
         dateDeadlineLabel.font = .subhead
-        dateDeadlineLabel.textColor = .secondaryLabel
+        dateDeadlineLabel.textColor = .customSecondaryLabel
         
         mainStack.axis = .horizontal
-        mainStack.spacing = 2
-        mainStack.alignment = .top
+        mainStack.spacing = 5
+        mainStack.alignment = .center
         
         dateDeadlineStack.spacing = 2
             
@@ -102,8 +98,8 @@ extension TodoItemTableViewCell {
         chevroneButton.translatesAutoresizingMaskIntoConstraints = false
         chevroneButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -edgeSize).isActive = true
         chevroneButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        chevroneButton.widthAnchor.constraint(equalToConstant: 7).isActive = true
-        chevroneButton.heightAnchor.constraint(equalToConstant: 9).isActive = true
+        chevroneButton.widthAnchor.constraint(equalToConstant: 10).isActive = true
+        chevroneButton.heightAnchor.constraint(equalToConstant: 12).isActive = true
         
         importanceImageView.translatesAutoresizingMaskIntoConstraints = false
         importanceImageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
@@ -117,7 +113,7 @@ extension TodoItemTableViewCell {
     func configureCell(_ item: TodoItem) {
         if item.dateСreation == .distantPast {
             itemTextLabel.attributedText = NSAttributedString(string: "Новое", attributes: [NSAttributedString.Key.strikethroughStyle: 0])
-            itemTextLabel.textColor = .secondaryLabel
+            itemTextLabel.textColor = .tertiaryLabel
             dateDeadlineStack.isHidden = true
             chevroneButton.isHidden = true
             checkMarkButton.isHidden = true
@@ -161,7 +157,7 @@ extension TodoItemTableViewCell {
             if item.isDone {
                 checkMarkButton.setImage(.greenCheckMarkCircleIcon, for: .normal)
                 itemTextLabel.attributedText = NSAttributedString(string: item.text, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
-                itemTextLabel.textColor = .secondaryLabel
+                itemTextLabel.textColor = .tertiaryLabel
             } else {
                 itemTextLabel.attributedText = NSAttributedString(string: item.text, attributes: [NSAttributedString.Key.strikethroughStyle: 0])
             }

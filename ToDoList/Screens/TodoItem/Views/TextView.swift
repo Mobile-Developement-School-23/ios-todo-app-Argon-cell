@@ -26,6 +26,4 @@ class TextView: UITextView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         layer.backgroundColor = UIColor.secondaryBack?.cgColor
     }
-    
-
 }

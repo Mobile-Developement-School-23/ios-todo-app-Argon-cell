@@ -1,18 +1,18 @@
 import Foundation
+// import UIKit
 
 // MARK: - Struct
-
-struct TodoItem {
+public struct TodoItem {
     let id: String
     var text: String
     var importance: Importance
     var dateDeadline: Date?
     var isDone: Bool
     var dateСreation: Date
-    var dateChanging: Date?
+    var dateChanging: Date
     var hexColor: String?
 
-    init(id: String = UUID().uuidString, text: String, importance: Importance, dateDeadline: Date? = nil, isDone: Bool = false, dateСreation: Date = Date(), dateChanging: Date? = nil, hexColor: String? = nil) {
+    init(id: String = UUID().uuidString, text: String, importance: Importance, dateDeadline: Date? = nil, isDone: Bool = false, dateСreation: Date = Date(), dateChanging: Date = Date(), hexColor: String? = nil) {
         self.id = id
         self.text = text
         self.importance = importance
@@ -25,7 +25,6 @@ struct TodoItem {
 }
 
 // MARK: - Extensions
-
 extension TodoItem {
     static func parse(json: Any) -> TodoItem? {
         guard let js = json as? [String: Any] else { return nil }
@@ -33,12 +32,13 @@ extension TodoItem {
         let importance = (js[JSONKeys.importance.rawValue] as? String).flatMap(Importance.init(rawValue: )) ?? .ordinary
         let isDone = js[JSONKeys.isDone.rawValue] as? Bool ?? false
         let dateDeadline = (js[JSONKeys.dateDeadline.rawValue] as? Double).flatMap { Date(timeIntervalSince1970: $0) }
-        let dateChanging = (js[JSONKeys.dateChanging.rawValue] as? Double).flatMap { Date(timeIntervalSince1970: $0) }
         let hexColor = js[JSONKeys.hexColor.rawValue] as? String
 
         guard let id = js[JSONKeys.id.rawValue] as? String,
               let text = js[JSONKeys.text.rawValue] as? String,
-              let dateCreation = (js[JSONKeys.dateСreation.rawValue] as? Double).flatMap({ Date(timeIntervalSince1970: $0) })
+              let dateCreation = (js[JSONKeys.dateСreation.rawValue] as? Double).flatMap({ Date(timeIntervalSince1970: $0) }),
+              let dateChanging = (js[JSONKeys.dateChanging.rawValue] as? Double).flatMap({ Date(timeIntervalSince1970: $0) })
+
         else {
             return nil
         }
@@ -58,20 +58,19 @@ extension TodoItem {
 
         jsonDict[JSONKeys.id.rawValue] = self.id
         jsonDict[JSONKeys.text.rawValue] = self.text
-        if self.importance != .ordinary {
-            jsonDict[JSONKeys.importance.rawValue] = self.importance.rawValue
-        }
-        if let dateDeadline = self.dateDeadline {
-            jsonDict[JSONKeys.dateDeadline.rawValue] = dateDeadline.timeIntervalSince1970
-        }
         jsonDict[JSONKeys.isDone.rawValue] = self.isDone
-        jsonDict[JSONKeys.dateСreation.rawValue] = self.dateСreation.timeIntervalSince1970
-        if let dateChanging = self.dateChanging {
-            jsonDict[JSONKeys.dateChanging.rawValue] = dateChanging.timeIntervalSince1970
+        jsonDict[JSONKeys.importance.rawValue] = self.importance.rawValue
+        jsonDict[JSONKeys.dateСreation.rawValue] = Int(self.dateСreation.timeIntervalSince1970)
+        jsonDict[JSONKeys.dateChanging.rawValue] = Int(dateChanging.timeIntervalSince1970)
+        
+        if let dateDeadline = self.dateDeadline {
+            jsonDict[JSONKeys.dateDeadline.rawValue] = Int(dateDeadline.timeIntervalSince1970)
         }
+
         if let hexColor = self.hexColor {
             jsonDict[JSONKeys.hexColor.rawValue] = hexColor
         }
+        jsonDict["last_updated_by"] = ""
 
         return jsonDict
     }
@@ -80,16 +79,19 @@ extension TodoItem {
 extension TodoItem {
     static func parse(csv: String) -> TodoItem? {
         let columns = csv.components(separatedBy: CSVSeparator.semicolon.rawValue)
-
+        guard columns.count == 8 else { return nil }
+        
         let id = String(columns[0])
         let text = String(columns[1])
         let importance = Importance(rawValue: columns[2]) ?? .ordinary
         let isDone = Bool(columns[4]) ?? false
         let dateDeadline = Double(columns[3]).flatMap { Date(timeIntervalSince1970: $0) }
-        let dateChanging = Double(columns[6]).flatMap { Date(timeIntervalSince1970: $0) }
         let hexColor = String(columns[7])
 
-        guard !id.isEmpty, !text.isEmpty, let dateCreation = Double(columns[5]).flatMap({ Date(timeIntervalSince1970: $0) }) else {
+        guard !id.isEmpty,
+              !text.isEmpty,
+              let dateCreation = Double(columns[5]).flatMap({ Date(timeIntervalSince1970: $0) }),
+              let dateChanging = Double(columns[6]).flatMap({ Date(timeIntervalSince1970: $0)}) else {
             return nil
         }
 
@@ -121,11 +123,8 @@ extension TodoItem {
         csvDataArray.append(String(self.isDone))
 
         csvDataArray.append(String(self.dateСreation.timeIntervalSince1970))
-        if let dateChanging = self.dateChanging {
-            csvDataArray.append(String(dateChanging.timeIntervalSince1970))
-        } else {
-            csvDataArray.append("")
-        }
+        csvDataArray.append(String(dateChanging.timeIntervalSince1970))
+
         if let hexColor = self.hexColor {
             csvDataArray.append(hexColor)
         }
@@ -137,8 +136,8 @@ extension TodoItem {
 // MARK: - Enum
 
 enum Importance: String {
-    case unimportant
-    case ordinary
+    case unimportant = "low"
+    case ordinary = "basic"
     case important
 }
 
@@ -146,11 +145,12 @@ private enum JSONKeys: String {
     case id
     case text
     case importance
-    case dateDeadline = "date_deadline"
-    case isDone = "is_done"
-    case dateСreation = "date_creation"
-    case dateChanging = "date_changing"
-    case hexColor = "hex_color"
+    case dateDeadline = "deadline"
+    case isDone = "done"
+    case hexColor = "color"
+    case dateСreation = "created_at"
+    case dateChanging = "changed_at"
+//    case lastUpdatedBy = "last_updated_by"
 }
 
 private enum CSVSeparator: String {

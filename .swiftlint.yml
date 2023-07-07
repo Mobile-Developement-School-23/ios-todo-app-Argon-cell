@@ -1,5 +1,7 @@
 disabled_rules:
 - trailing_whitespace
+- switch_case_alignment
+- switch_case_on_newline 
 
 line_length:
 - 300 # warning

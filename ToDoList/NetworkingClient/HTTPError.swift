@@ -11,4 +11,5 @@ public enum HTTPError: String, Error {
     case decodingFailed = "Error: Failed to decode data"
     case wrongRequest = "Error: wrong request / invalid url / unsynchronizedData"
     case notFound = "Error: Element not found on server."
+    case retryCountToMuch = "Error: To much tries on server."
 }

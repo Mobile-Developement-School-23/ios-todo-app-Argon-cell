@@ -13,45 +13,42 @@ struct NetworkClientImp: NetworkClient {
     }
 
     // MARK: - Public
-    func processRetryListRequest(request: HTTPRequest, tryCount: Int, completion: @escaping (Result<([TodoItem], Int), Error>) -> Void) -> Cancellable? {
+    func processRetryListRequest(request: HTTPRequest, tryCount: Int, completion: @Sendable @escaping (Result<([TodoItem], Int), Error>) -> Void) -> Cancellable? {
         let delay = min(Double(Constants.minDelay * pow(1.5, Double(tryCount))), Constants.maxDelay)
         let totalDelay = delay * (1.0 + Constants.jitter)
 
         return processListRequest(request: request) { result in
             switch result {
-            case .success(let success):
-                completion(.success(success))
-            case .failure(let error):
-                if tryCount < Constants.maxAttempts {
-                    if let httpError = error as? HTTPError {
-                        switch httpError {
-                            case .failed:
-                                processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
-                            case .missingURL:
-                                completion(.failure(httpError))
-                            case .missingURLComponents:
-                                completion(.failure(httpError))
-                            case .failedResponseUnwrapping:
-                                processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
-                            // Не известно
-                            case .badRequest:
-                                completion(.failure(httpError))
-                            case .authenticationError:
-                                completion(.failure(httpError))
-                            case .serverSideError:
-                                processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
-                            case .decodingFailed:
-                                completion(.failure(httpError))
-                            case .wrongRequest:
-                                completion(.failure(httpError))
-                            case .notFound:
-                                completion(.failure(httpError))
+                case .success(let success):
+                    completion(.success(success))
+                case .failure(let error):
+                    if tryCount < Constants.maxAttempts {
+                        if let httpError = error as? HTTPError {
+                            switch httpError {
+                                case .failed:
+                                    DispatchQueue.global().asyncAfter(deadline: .now() + totalDelay) {
+                                        processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
+                                    }
+                                case .serverSideError:
+                                    DispatchQueue.global().asyncAfter(deadline: .now() + totalDelay) {
+                                        processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
+                                    }
+                                default:
+                                    completion(.failure(httpError))
+                            }
+                        } else {
+                            completion(.failure(error))
+                        }
+                    } else {
+                        processListRequest(request:  HTTPRequest(route: "\(NetworkServiceImp.Constants.baseurl)/list", headers: request.headers)) { result in
+                            switch result {
+                                case .success(let success):
+                                    completion(.success(success))
+                                case .failure(let failure):
+                                    completion(.failure(error))
+                            }
                         }
                     }
-                } else {
-                    let updatedRequest = HTTPRequest(route: "\(NetworkServiceImp.Constants.baseurl)/list", headers: request.headers)
-                    processListRequest(request: updatedRequest, completion: completion)
-                }
             }
         }
     }
@@ -68,29 +65,20 @@ struct NetworkClientImp: NetworkClient {
                 if tryCount < Constants.maxAttempts {
                     if let httpError = error as? HTTPError {
                         switch httpError {
-                            case .failed:
+                        case .failed:
+                            DispatchQueue.global().asyncAfter(deadline: .now() + totalDelay) {
                                 processRetryItemRequest(request: request, tryCount: tryCount + 1, completion: completion)
-                            case .missingURL:
-                                completion(.failure(httpError))
-                            case .missingURLComponents:
-                                completion(.failure(httpError))
-                            case .failedResponseUnwrapping:
+                            }
+                        case .serverSideError:
+                            DispatchQueue.global().asyncAfter(deadline: .now() + totalDelay) {
                                 processRetryItemRequest(request: request, tryCount: tryCount + 1, completion: completion)
-                            // Не известно
-                            case .badRequest:
-                                completion(.failure(httpError))
-                            case .authenticationError:
-                                completion(.failure(httpError))
-                            case .serverSideError:
-                                processRetryItemRequest(request: request, tryCount: tryCount + 1, completion: completion)
-                            case .decodingFailed:
-                                completion(.failure(httpError))
-                            case .wrongRequest:
-                                completion(.failure(httpError))
-                            case .notFound:
-                                completion(.failure(httpError))
+                            }
+                        default:
+                            completion(.failure(httpError))
                         }
                     }
+                } else {
+                    completion(.failure(HTTPError.retryCountToMuch))
                 }
             }
         }
@@ -161,7 +149,7 @@ struct NetworkClientImp: NetworkClient {
                 }
                 
                 let handledResponse = HTTPNetworkResponse.handleNetworkResponse(for: response)
-
+               
                 switch handledResponse {
                 case .success:
                     var result: [TodoItem] = []
@@ -209,17 +197,17 @@ struct NetworkClientImp: NetworkClient {
                     return
                 }
                 let handledResponse = HTTPNetworkResponse.handleNetworkResponse(for: response)
-
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                      let elementTodoItem = jsonObject["element"] else {
-                    NetworkClientImp.executeCompletionOnMainThread {
-                        completion(.failure(FileCacheErrors.jSONConvertationError))
-                    }
-                    return
-                }
                 
                 switch handledResponse {
                 case .success:
+                    guard let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                          let elementTodoItem = jsonObject["element"] else {
+                        NetworkClientImp.executeCompletionOnMainThread {
+                            completion(.failure(FileCacheErrors.jSONConvertationError))
+                        }
+                        return
+                    }
+                    
                     let result = TodoItem.parse(json: elementTodoItem)
 
                     if let result = result {
@@ -283,17 +271,16 @@ extension NetworkClientImp {
     enum Constants {
         static let replaceOccurrencesOf: String = "+"
         static let replacingOccurrencesWith: String = "%2B"
-        static let timeout: Double = 30.0
+        static let timeout: Double = 10.0
         static let jitterMinBound: Double = 0.0
         static let jitterMaxnBound: Double = 0.05
         static let maxDelay: Double = 120.0
         static let minDelay: Double = 2.0
-        static let maxAttempts: Int = 3
+        static let maxAttempts: Int = 2
 
         static var jitter: Double {
-            get {
-                return Double.random(in: jitterMinBound...jitterMaxnBound)
-            }
+            return Double.random(in: jitterMinBound...jitterMaxnBound)
+
         }
     }
 }

@@ -14,5 +14,5 @@ extension UIImage {
     static var calendarIcon: UIImage? { return UIImage(systemName: "calendar")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal) }
     static var offlineIcon: UIImage? { return UIImage(systemName: "icloud.slash.fill")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal) }
     static var logoutIcon: UIImage? { return UIImage(systemName: "rectangle.portrait.and.arrow.right")?.withTintColor(.customBlue ?? .blue, renderingMode: .alwaysOriginal) }
-    static var plusIcon: UIImage? { return UIImage(named: "plus") }
+    static var plusIcon: UIImage? { return UIImage(named: "Plus") }
 }

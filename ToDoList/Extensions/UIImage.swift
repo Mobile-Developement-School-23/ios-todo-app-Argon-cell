@@ -8,7 +8,7 @@ extension UIImage {
     static var whiteTrashIcon: UIImage? { return UIImage(systemName: "trash.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal) }
     static var greenCheckMarkCircleIcon: UIImage? { return UIImage(named: "prop.on") }
     static var whiteCheckMarkCircleIcon: UIImage? { return UIImage(systemName: "checkmark.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal) }
-    static var undoneCircleIcon: UIImage? { return UIImage(named: "prop.off")?.withTintColor(.white, renderingMode: .automatic) }
+    static var undoneCircleIcon: UIImage? { return UIImage(named: "prop.off")?.withTintColor(.primaryLabel!, renderingMode: .automatic) }
     static var importantCircleIcon: UIImage? { return UIImage(named: "prop.high.importance") }
     static var chevroneRightIcon: UIImage? { return UIImage(named: "chevrone.right") }
     static var calendarIcon: UIImage? { return UIImage(systemName: "calendar")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal) }

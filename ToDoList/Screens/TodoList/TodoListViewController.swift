@@ -120,10 +120,10 @@ class TodoListViewController: UIViewController {
         headerView.change = { areDoneCellsHiden in
             if areDoneCellsHiden {
                 self.removeDoneTodoItems()
-                self.tableView.reloadData()
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
             } else {
                 self.addDoneItems()
-                self.tableView.reloadData()
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
             }
         }
         
@@ -156,7 +156,7 @@ class TodoListViewController: UIViewController {
         }
         self.todoItems.append(TodoItem(text: "", importance: .important, dateСreation: Date.distantPast))
 
-        self.tableView.reloadData()
+        self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
         self.stopLoading()
     }
     

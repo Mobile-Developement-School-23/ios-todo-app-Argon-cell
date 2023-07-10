@@ -1,13 +1,73 @@
 import Foundation
 
 final class FileCacheImp: Storable, FileCache {
+    // MARK: - Properties
     var isDirty: Bool
 
     private let storageType: StorageType
     private(set) var todoItems: [String: TodoItem] = [:]
+    var markeredToDeleteItems: [String: Int] = [:]
+    var markeredToUpdateItems: [String: Int] = [:]
     
-    func getItems() -> [TodoItem] {
+    // MARK: - Inits
+    init(storageType: StorageType, todoItems: [String: TodoItem]) {
+        self.storageType = storageType
+        self.todoItems = todoItems
+        self.isDirty = true
+    }
+    
+    convenience init(storageType: StorageType) {
+        self.init(storageType: storageType, todoItems: [:])
+    }
+    
+    // MARK: - Methods
+    
+    //Get methods
+    func getItem(id: String) -> TodoItem? {
+        return todoItems[id]
+    }
+    
+    func getList() -> [TodoItem] {
         return Array(todoItems.values)
+    }
+    
+    //Set methods
+    func addElement(_ item: TodoItem) {
+        if let oldItem = todoItems[item.id] {
+            if item != oldItem {
+                if item.dateChanging >= oldItem.dateChanging {
+                    todoItems[item.id] = item
+                }
+            }
+        } else {
+            todoItems[item.id] = item
+        }
+    }
+    
+    func updateElement(_ item: TodoItem) {
+        if item != todoItems[item.id] {
+            addElement(item)
+        }
+    }
+    
+    func setList(_ items: [TodoItem]) {
+        todoItems = [:]
+        for item in items {
+            addElement(item)
+        }
+    }
+    
+    func mergeList(_ items: [TodoItem]) {
+        for item in items {
+            if markeredToDeleteItems[item.id] == nil {
+                addElement(item)
+            }
+        }
+    }
+    
+    func deleteElement(_ item: TodoItem) {
+        todoItems[item.id] = nil
+
     }
     
     func save(to file: String) throws {
@@ -27,52 +87,6 @@ final class FileCacheImp: Storable, FileCache {
             try saveToCSV(file: file)
         }
     }
-    
-    // Overloading update methods
-    func setItems(_ items: [TodoItem]) {
-        todoItems = [:]
-        for item in items {
-            add(item)
-        }
-    }
-    func update(_ items: [TodoItem]) {
-        for item in items {
-            add(item)
-        }
-    }
-
-    func update(_ item: TodoItem) {
-        add(item)
-    }
-    
-    func add(_ item: TodoItem) {
-        todoItems[item.id] = item
-    }
-    
-    // Overloading remove methods
-    @discardableResult
-    func remove(with id: String) -> TodoItem? {
-        if let itemIntList = todoItems[id] {
-            todoItems[id] = nil
-            return itemIntList
-        } else {
-            return nil
-        }
-    }
-    
-    func remove(_ item: TodoItem) {
-        remove(with: item.id)
-    }
-    
-    init(storageType: StorageType, todoItems: [String: TodoItem]) {
-        self.storageType = storageType
-        self.todoItems = todoItems
-        self.isDirty = true
-    }
-    
-    convenience init(storageType: StorageType) {
-        self.init(storageType: storageType, todoItems: [:])
-    }
 }
 
 // MARK: - Extensions
@@ -88,7 +102,7 @@ extension FileCacheImp {
 
         for jsonItem in jsonObject {
             if let parsedItem = TodoItem.parse(json: jsonItem) {
-                add(parsedItem)
+                addElement(parsedItem)
             }
         }
     }
@@ -117,24 +131,24 @@ extension FileCacheImp {
 
         guard let data = try? String(contentsOf: pathWithFileName, encoding: .utf8) else { throw FileCacheErrors.pathToFileNotFound }
 
-        var rows = data.description.components(separatedBy: csvLineSeparator)
+        var rows = data.description.components(separatedBy: Constants.csvLineSeparator)
         rows.removeFirst()
 
         for row in rows {
             if let item = TodoItem.parse(csv: String(row)) {
-                add(item)
+                addElement(item)
             }
         }
     }
 
     func saveToCSV(file name: String) throws {
-        var dataToSave = [csvHeaderFormat]
+        var dataToSave = [Constants.csvHeaderFormat]
 
         for todoCSVItem in todoItems.map({ $1.csv }) {
             dataToSave.append(todoCSVItem)
         }
 
-        let joinedString = dataToSave.joined(separator: csvLineSeparator)
+        let joinedString = dataToSave.joined(separator: Constants.csvLineSeparator)
 
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { throw FileCacheErrors.directoryNotFound }
         let pathWithFileName = documentDirectory.appendingPathComponent(name + FileFormat.csv.rawValue)
@@ -156,10 +170,14 @@ enum FileCacheErrors: String, Error {
     case writeFileError = "Ошибка при записи файла"
 }
 
-private enum FileFormat: String {
-    case csv = ".csv"
-    case json = ".json"
+extension FileCacheImp {
+    private enum FileFormat: String {
+        case csv = ".csv"
+        case json = ".json"
+    }
+    
+    enum Constants {
+        static let csvHeaderFormat = "id;text;importance;date_deadline;is_done;date_creation;date_changing"
+        static let csvLineSeparator = "/r/n"
+    }
 }
-
-private let csvHeaderFormat = "id;text;importance;date_deadline;is_done;date_creation;date_changing"
-private let csvLineSeparator = "/r/n"

@@ -2,7 +2,7 @@ import Foundation
 // import UIKit
 
 // MARK: - Struct
-public struct TodoItem {
+public struct TodoItem: Equatable, Hashable {
     let id: String
     var text: String
     var importance: Importance
@@ -131,6 +131,10 @@ extension TodoItem {
 
         return csvDataArray.lazy.joined(separator: CSVSeparator.semicolon.rawValue)
     }
+}
+
+extension TodoItem {
+    
 }
 
 // MARK: - Enum

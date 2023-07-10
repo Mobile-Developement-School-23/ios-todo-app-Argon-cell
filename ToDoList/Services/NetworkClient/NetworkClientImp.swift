@@ -40,7 +40,7 @@ struct NetworkClientImp: NetworkClient {
                             completion(.failure(error))
                         }
                     } else {
-                        processListRequest(request:  HTTPRequest(route: "\(NetworkServiceImp.Constants.baseurl)/list", headers: request.headers)) { result in
+                        processListRequest(request: HTTPRequest(route: "\(NetworkServiceImp.Constants.baseurl)/list", headers: request.headers)) { result in
                             switch result {
                                 case .success(let success):
                                     completion(.success(success))

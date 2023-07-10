@@ -13,8 +13,4 @@ target 'ToDoList' do
     # Pods for testing
   end
 
-  target 'ToDoListUITests' do
-    # Pods for testing
-  end
-
 end

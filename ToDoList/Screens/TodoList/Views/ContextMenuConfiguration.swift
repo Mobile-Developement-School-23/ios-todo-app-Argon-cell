@@ -12,6 +12,7 @@ extension TodoListViewController {
             
             let doneAction = UIAction(title: textSaveAction, image: imageSaveAction) { _ in
                 currentTodoItem.isDone = !currentTodoItem.isDone
+                currentTodoItem.dateChanging = Date()
                 self.dataManagerService.updateElementLocally(currentTodoItem)
                 self.startLoading()
                 self.dataManagerService.updateElementNetwork(currentTodoItem)
@@ -40,6 +41,12 @@ extension TodoListViewController {
         vc.setUserInteractionDisabled()
         show(vc, sender: nil)
     }
+    
+//    func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+//        animator?.addCompletion {
+//            tableView.reloadData()
+//        }
+//    }
 }
 
 private let makeDoneActionText = "Make done"

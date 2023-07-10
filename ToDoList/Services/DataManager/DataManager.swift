@@ -4,21 +4,20 @@ protocol DataManager: AnyObject {
     var dataDelegate: (([TodoItem]) -> Void)? { get set }
     
     // MARK: - Storable methods
-    @discardableResult
-    func addElementLocally(_ item: TodoItem) -> [TodoItem]
+    func addElementLocally(_ item: TodoItem)
+    func deleteElementLocally(_ item: TodoItem)
+    func updateElementLocally(_ item: TodoItem)
     
-    @discardableResult
-    func deleteElementLocally(_ item: TodoItem) -> [TodoItem]
+    func loadListLocally()
+    func saveListLocally()
     
-    @discardableResult
-    func updateElementLocally(_ item: TodoItem) -> [TodoItem]
+    func getListLocally() -> [TodoItem]
     
-    func loadListLocally() -> [TodoItem]
     func storageIsDirty() -> Bool
     
     // MARK: - Network methods
-    func getListNetwork(completion: @escaping (Result<[TodoItem], Error>) -> Void)
-    func updateListNetwork(completion: @escaping (Result<[TodoItem], Error>) -> Void)
+    func getListNetwork(completion: @escaping (Result<([TodoItem], Revision), Error>) -> Void)
+    func patchListNetwork(_ items: [TodoItem], completion: @escaping (Result<([TodoItem], Revision), Error>) -> Void)
     
     func addElementNetwork(_ item: TodoItem)
     func deleteElementNetwork(_ item: TodoItem)
@@ -27,5 +26,7 @@ protocol DataManager: AnyObject {
     
     func updateNetworkToken(_ token: String?)
     func updateRevision(_ revision: Revision)
-    func checkToken(_ clouser: @escaping ((Bool) -> Void))
+    func checkToken(_ completion: @escaping ((Bool) -> Void))
+    
+    func makeSynchronization()
 }

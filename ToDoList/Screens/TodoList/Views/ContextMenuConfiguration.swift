@@ -3,28 +3,27 @@ import UIKit
 
 extension TodoListViewController {
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let currentTodoItem = todoItems[indexPath.row]
+        var currentTodoItem = todoItems[indexPath.row]
         guard currentTodoItem.dateСreation != .distantPast else { return nil }
         
-        let conifguration = UIContextMenuConfiguration(identifier: currentTodoItem.id as NSCopying, previewProvider: nil) { [weak self] _ in
-            guard let self = self else { return nil }
+        let conifguration = UIContextMenuConfiguration(identifier: currentTodoItem.id as NSCopying, previewProvider: nil) { _ in
             let textSaveAction = currentTodoItem.isDone ? makeUndoneActionText : makeDoneActionText
             let imageSaveAction: UIImage? = currentTodoItem.isDone ? .undoneCircleIcon : .greenCheckMarkCircleIcon
             
-            let saveAction = UIAction(title: textSaveAction, image: imageSaveAction) { _ in
-                self.itemDoneAction(indexPath.row)
-                self.makeSave()
-                tableView.reloadData()
+            let doneAction = UIAction(title: textSaveAction, image: imageSaveAction) { _ in
+                currentTodoItem.isDone = !currentTodoItem.isDone
+                self.dataManagerService.updateElementLocally(currentTodoItem)
+                self.startLoading()
+                self.dataManagerService.updateElementNetwork(currentTodoItem)
             }
             
             let deleteAction = UIAction(title: deleteActionText, image: .redTrashIcon) { _ in
-                self.todoItems.remove(at: indexPath.row)
-                self.updateCount()
-                self.makeSave()
-                tableView.reloadData()
+                self.dataManagerService.deleteElementLocally(currentTodoItem)
+                self.startLoading()
+                self.dataManagerService.deleteElementNetwork(currentTodoItem)
             }
             
-            let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [saveAction, deleteAction])
+            let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [doneAction, deleteAction])
             
             return menu
         }
@@ -40,11 +39,6 @@ extension TodoListViewController {
         vc.transitioningDelegate = self
         vc.setUserInteractionDisabled()
         show(vc, sender: nil)
-    }
-    
-    func updateCount() {
-        let filteredTodoItemsCount = todoItems.filter { $0.isDone }.count
-        headerView.update(filteredTodoItemsCount == 0 ? doneTodoItems.count : filteredTodoItemsCount)
     }
 }
 

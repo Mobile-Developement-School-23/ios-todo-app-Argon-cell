@@ -8,9 +8,11 @@ extension UIColor {
     
     static var separatorSupport: UIColor? { return UIColor(named: "SeparatorSupport") }
     static var overlaySupport: UIColor? { return UIColor(named: "OverlaySupport") }
+    static var navBarBlurSupport: UIColor? { return UIColor(named: "NavBarBlurSupport") }
     
     static var tertiaryLabel: UIColor? { return UIColor(named: "TertiaryLabel") }
     static var primaryLabel: UIColor? { return UIColor(named: "PrimaryLabel") }
+    static var customSecondaryLabel: UIColor? { return UIColor(named: "SecondaryLabel") }
     
     static var customGreen: UIColor? { return UIColor(named: "Green") }
     static var customRed: UIColor? { return UIColor(named: "Red") }

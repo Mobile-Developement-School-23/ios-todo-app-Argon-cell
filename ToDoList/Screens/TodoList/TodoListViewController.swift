@@ -81,6 +81,8 @@ class TodoListViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .primaryBack
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сетевые тесты", style: .done, target: self, action: #selector(showConcurrencuMenuTap))
+        
         headerView.change = { areDoneCellsHiden in
             if areDoneCellsHiden {
                 self.removeDoneTodoItems()
@@ -109,6 +111,11 @@ class TodoListViewController: UIViewController {
         tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+    }
+    
+    
+    @objc func showConcurrencuMenuTap(sender: UIBarButtonItem) {
+        navigationController?.present(ConcurrencyMenuViewController(dataHolder: DataHolder()), animated: true)
     }
 }
 

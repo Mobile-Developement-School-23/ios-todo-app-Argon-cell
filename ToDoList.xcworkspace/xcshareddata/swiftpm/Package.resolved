@@ -17,15 +17,6 @@
         "revision" : "32e8d724467f8fe623624570367e3d50c5638e46",
         "version" : "1.5.2"
       }
-    },
-    {
-      "identity" : "todoitempackage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Argon-cell/TodoItemPackage.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "c78f97c6e184334dc98e4faee31ac63ae385f4e7"
-      }
     }
   ],
   "version" : 2

@@ -117,6 +117,8 @@ class TodoListViewController: UIViewController {
             }
         }
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сетевые тесты", style: .done, target: self, action: #selector(showConcurrencuMenuTap))
+        
         headerView.change = { areDoneCellsHiden in
             if areDoneCellsHiden {
                 self.removeDoneTodoItems()
@@ -215,6 +217,11 @@ class TodoListViewController: UIViewController {
         }
         vc.setupNavigatorButtons()
         present(navigationController, animated: true, completion: nil)
+    }
+    
+    
+    @objc func showConcurrencuMenuTap(sender: UIBarButtonItem) {
+        navigationController?.present(ConcurrencyMenuViewController(dataHolder: DataHolder()), animated: true)
     }
 }
 

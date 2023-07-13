@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0DE0BE6C425FDE13B64CECFA /* Pods_ToDoList_ToDoListUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FE8CB224F7AA2917987E713 /* Pods_ToDoList_ToDoListUITests.framework */; };
 		3C7A3A7E8DC50C0F947A60E3 /* Pods_ToDoList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEE793C45EA7641C24C9C13C /* Pods_ToDoList.framework */; };
+		7821B7612A53F455008F541B /* DataHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7821B7602A53F455008F541B /* DataHolder.swift */; };
+		7821B7632A53F4A7008F541B /* ConcurrencyMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7821B7622A53F4A7008F541B /* ConcurrencyMenuViewController.swift */; };
 		782D5AC52A467DFF00777655 /* TodoItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5AC42A467DFF00777655 /* TodoItemViewController.swift */; };
 		782D5ACD2A467E6E00777655 /* BodyLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5AC92A467E6E00777655 /* BodyLabelView.swift */; };
 		782D5ACE2A467E6E00777655 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ACA2A467E6E00777655 /* TextView.swift */; };
@@ -77,6 +79,8 @@
 		4FE8CB224F7AA2917987E713 /* Pods_ToDoList_ToDoListUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_ToDoListUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		691D141AC9DF51D0A1D06176 /* Pods-ToDoList-ToDoListUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ToDoListUITests.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		753CD500B39E66BC57FCE72E /* Pods-ToDoList-ToDoListUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ToDoListUITests.release.xcconfig"; path = "Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests.release.xcconfig"; sourceTree = "<group>"; };
+		7821B7602A53F455008F541B /* DataHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHolder.swift; sourceTree = "<group>"; };
+		7821B7622A53F4A7008F541B /* ConcurrencyMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrencyMenuViewController.swift; sourceTree = "<group>"; };
 		782D5AC42A467DFF00777655 /* TodoItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemViewController.swift; sourceTree = "<group>"; };
 		782D5AC92A467E6E00777655 /* BodyLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyLabelView.swift; sourceTree = "<group>"; };
 		782D5ACA2A467E6E00777655 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -159,6 +163,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7821B75F2A53F442008F541B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7821B7602A53F455008F541B /* DataHolder.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		782D5AC32A467DD000777655 /* TodoItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +210,7 @@
 				782D5ADD2A467F3E00777655 /* UIImage.swift */,
 				782D5ADE2A467F3E00777655 /* UIViewController.swift */,
 				782D5ADF2A467F3E00777655 /* UIFont.swift */,
+				789ADF332A52CCC000185D77 /* URLSession.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -340,6 +353,7 @@
 				78DAB2EB2A54D30200359609 /* DataManager.swift */,
 			);
 			path = DataManager;
+
 			sourceTree = "<group>";
 		};
 		78FE88C52A47838100A059FA /* TodoList */ = {
@@ -625,10 +639,12 @@
 				7840C2252A33B4EC00EEA3AF /* AppDelegate.swift in Sources */,
 				78DAB2EA2A54D18600359609 /* DataManagerImp.swift in Sources */,
 				782D5AE02A467F3E00777655 /* Date.swift in Sources */,
+
 				78F884622A575E990060CD89 /* Storable.swift in Sources */,
 				789ADF002A51B65700185D77 /* NetworkServiceImp.swift in Sources */,
 				789ADF2A2A51B6DC00185D77 /* HTTPRequest.swift in Sources */,
 				789ADF292A51B6DC00185D77 /* NetworkClientImp.swift in Sources */,
+
 				7840C2592A33B6FF00EEA3AF /* TodoItem.swift in Sources */,
 				78DAB2F12A54E69400359609 /* FileCacheImp.swift in Sources */,
 				782D5ACF2A467E6E00777655 /* ColorWheelPickerView.swift in Sources */,
@@ -642,10 +658,13 @@
 				789ADF2B2A51B6DC00185D77 /* HTTPNetworkResponse.swift in Sources */,
 				78FE88D22A4A216B00A059FA /* TableViewConfiguration.swift in Sources */,
 				782D5AE12A467F3E00777655 /* UIColor.swift in Sources */,
+
 				78DAB2EC2A54D30200359609 /* DataManager.swift in Sources */,
 				789ADF2C2A51B6DC00185D77 /* HTTPMethod.swift in Sources */,
+
 				782D5ACD2A467E6E00777655 /* BodyLabelView.swift in Sources */,
 				782D5AE42A467F3E00777655 /* UIFont.swift in Sources */,
+				7821B7612A53F455008F541B /* DataHolder.swift in Sources */,
 				782D5AE22A467F3E00777655 /* UIImage.swift in Sources */,
 				7832A25C2A4D130A00DE58A8 /* ContextMenuConfiguration.swift in Sources */,
 				78FE88CA2A478A4C00A059FA /* TodoItemTableViewCell.swift in Sources */,

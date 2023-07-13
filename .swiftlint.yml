@@ -1,5 +1,11 @@
 disabled_rules:
 - trailing_whitespace
+- switch_case_alignment
+- switch_case_on_newline 
+- force_cast
+- cyclomatic_complexity
+- type_body_length
+- file_length
 
 line_length:
 - 300 # warning

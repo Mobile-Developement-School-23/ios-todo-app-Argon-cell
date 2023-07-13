@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0DE0BE6C425FDE13B64CECFA /* Pods_ToDoList_ToDoListUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FE8CB224F7AA2917987E713 /* Pods_ToDoList_ToDoListUITests.framework */; };
 		3C7A3A7E8DC50C0F947A60E3 /* Pods_ToDoList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEE793C45EA7641C24C9C13C /* Pods_ToDoList.framework */; };
+		7821B7612A53F455008F541B /* DataHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7821B7602A53F455008F541B /* DataHolder.swift */; };
+		7821B7632A53F4A7008F541B /* ConcurrencyMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7821B7622A53F4A7008F541B /* ConcurrencyMenuViewController.swift */; };
 		782D5AC52A467DFF00777655 /* TodoItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5AC42A467DFF00777655 /* TodoItemViewController.swift */; };
 		782D5ACD2A467E6E00777655 /* BodyLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5AC92A467E6E00777655 /* BodyLabelView.swift */; };
 		782D5ACE2A467E6E00777655 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ACA2A467E6E00777655 /* TextView.swift */; };
@@ -35,7 +37,7 @@
 		789ADEDF2A50CA0300185D77 /* CocoaLumberjack in Frameworks */ = {isa = PBXBuildFile; productRef = 789ADEDE2A50CA0300185D77 /* CocoaLumberjack */; };
 		789ADEE12A50CA0300185D77 /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 789ADEE02A50CA0300185D77 /* CocoaLumberjackSwift */; };
 		789ADEE32A50CA0300185D77 /* CocoaLumberjackSwiftLogBackend in Frameworks */ = {isa = PBXBuildFile; productRef = 789ADEE22A50CA0300185D77 /* CocoaLumberjackSwiftLogBackend */; };
-		789ADEE62A50CA1400185D77 /* TodoItem in Frameworks */ = {isa = PBXBuildFile; productRef = 789ADEE52A50CA1400185D77 /* TodoItem */; };
+		789ADF342A52CCC000185D77 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADF332A52CCC000185D77 /* URLSession.swift */; };
 		78FE88C72A4783AC00A059FA /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE88C62A4783AC00A059FA /* TodoListViewController.swift */; };
 		78FE88CA2A478A4C00A059FA /* TodoItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE88C92A478A4C00A059FA /* TodoItemTableViewCell.swift */; };
 		78FE88CE2A499B1700A059FA /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE88CD2A499B1700A059FA /* HeaderView.swift */; };
@@ -66,6 +68,8 @@
 		4FE8CB224F7AA2917987E713 /* Pods_ToDoList_ToDoListUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_ToDoListUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		691D141AC9DF51D0A1D06176 /* Pods-ToDoList-ToDoListUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ToDoListUITests.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		753CD500B39E66BC57FCE72E /* Pods-ToDoList-ToDoListUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ToDoListUITests.release.xcconfig"; path = "Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests.release.xcconfig"; sourceTree = "<group>"; };
+		7821B7602A53F455008F541B /* DataHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHolder.swift; sourceTree = "<group>"; };
+		7821B7622A53F4A7008F541B /* ConcurrencyMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrencyMenuViewController.swift; sourceTree = "<group>"; };
 		782D5AC42A467DFF00777655 /* TodoItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemViewController.swift; sourceTree = "<group>"; };
 		782D5AC92A467E6E00777655 /* BodyLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyLabelView.swift; sourceTree = "<group>"; };
 		782D5ACA2A467E6E00777655 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -93,6 +97,7 @@
 		7840C2582A33B6FF00EEA3AF /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		7840C2602A33D50900EEA3AF /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 		7840C2792A350A4600EEA3AF /* ToDoItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemTests.swift; sourceTree = "<group>"; };
+		789ADF332A52CCC000185D77 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		78FE88C62A4783AC00A059FA /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		78FE88C92A478A4C00A059FA /* TodoItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemTableViewCell.swift; sourceTree = "<group>"; };
 		78FE88CD2A499B1700A059FA /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
@@ -111,7 +116,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				789ADEE12A50CA0300185D77 /* CocoaLumberjackSwift in Frameworks */,
-				789ADEE62A50CA1400185D77 /* TodoItem in Frameworks */,
 				789ADEE32A50CA0300185D77 /* CocoaLumberjackSwiftLogBackend in Frameworks */,
 				789ADEDF2A50CA0300185D77 /* CocoaLumberjack in Frameworks */,
 				3C7A3A7E8DC50C0F947A60E3 /* Pods_ToDoList.framework in Frameworks */,
@@ -137,6 +141,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7821B75F2A53F442008F541B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7821B7602A53F455008F541B /* DataHolder.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		782D5AC32A467DD000777655 /* TodoItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +188,7 @@
 				782D5ADD2A467F3E00777655 /* UIImage.swift */,
 				782D5ADE2A467F3E00777655 /* UIViewController.swift */,
 				782D5ADF2A467F3E00777655 /* UIFont.swift */,
+				789ADF332A52CCC000185D77 /* URLSession.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -253,6 +266,7 @@
 		7840C25E2A33D44E00EEA3AF /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				789ADF352A5340B900185D77 /* ConcurrencyMenu */,
 				78FE88C52A47838100A059FA /* TodoList */,
 				782D5AC32A467DD000777655 /* TodoItem */,
 			);
@@ -265,6 +279,15 @@
 				7840C2602A33D50900EEA3AF /* FileCache.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		789ADF352A5340B900185D77 /* ConcurrencyMenu */ = {
+			isa = PBXGroup;
+			children = (
+				7821B75F2A53F442008F541B /* Models */,
+				7821B7622A53F4A7008F541B /* ConcurrencyMenuViewController.swift */,
+			);
+			path = ConcurrencyMenu;
 			sourceTree = "<group>";
 		};
 		78FE88C52A47838100A059FA /* TodoList */ = {
@@ -334,7 +357,6 @@
 				789ADEDE2A50CA0300185D77 /* CocoaLumberjack */,
 				789ADEE02A50CA0300185D77 /* CocoaLumberjackSwift */,
 				789ADEE22A50CA0300185D77 /* CocoaLumberjackSwiftLogBackend */,
-				789ADEE52A50CA1400185D77 /* TodoItem */,
 			);
 			productName = ToDoList;
 			productReference = 7840C2212A33B4EC00EEA3AF /* ToDoList.app */;
@@ -415,7 +437,6 @@
 			mainGroup = 7840C2182A33B4EC00EEA3AF;
 			packageReferences = (
 				789ADEDD2A50CA0300185D77 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */,
-				789ADEE42A50CA1400185D77 /* XCRemoteSwiftPackageReference "TodoItemPackage" */,
 			);
 			productRefGroup = 7840C2222A33B4EC00EEA3AF /* Products */;
 			projectDirPath = "";
@@ -552,6 +573,7 @@
 			files = (
 				7840C2252A33B4EC00EEA3AF /* AppDelegate.swift in Sources */,
 				782D5AE02A467F3E00777655 /* Date.swift in Sources */,
+				789ADF342A52CCC000185D77 /* URLSession.swift in Sources */,
 				7840C2592A33B6FF00EEA3AF /* TodoItem.swift in Sources */,
 				782D5ACF2A467E6E00777655 /* ColorWheelPickerView.swift in Sources */,
 				782D5AC52A467DFF00777655 /* TodoItemViewController.swift in Sources */,
@@ -562,9 +584,11 @@
 				782D5AE32A467F3E00777655 /* UIViewController.swift in Sources */,
 				78FE88D22A4A216B00A059FA /* TableViewConfiguration.swift in Sources */,
 				782D5AE12A467F3E00777655 /* UIColor.swift in Sources */,
+				7821B7632A53F4A7008F541B /* ConcurrencyMenuViewController.swift in Sources */,
 				78FE88C72A4783AC00A059FA /* TodoListViewController.swift in Sources */,
 				782D5ACD2A467E6E00777655 /* BodyLabelView.swift in Sources */,
 				782D5AE42A467F3E00777655 /* UIFont.swift in Sources */,
+				7821B7612A53F455008F541B /* DataHolder.swift in Sources */,
 				782D5AE22A467F3E00777655 /* UIImage.swift in Sources */,
 				7832A25C2A4D130A00DE58A8 /* ContextMenuConfiguration.swift in Sources */,
 				7840C2272A33B4EC00EEA3AF /* SceneDelegate.swift in Sources */,
@@ -758,6 +782,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -791,6 +816,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -938,14 +964,6 @@
 				kind = branch;
 			};
 		};
-		789ADEE42A50CA1400185D77 /* XCRemoteSwiftPackageReference "TodoItemPackage" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Argon-cell/TodoItemPackage.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -963,11 +981,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 789ADEDD2A50CA0300185D77 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */;
 			productName = CocoaLumberjackSwiftLogBackend;
-		};
-		789ADEE52A50CA1400185D77 /* TodoItem */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 789ADEE42A50CA1400185D77 /* XCRemoteSwiftPackageReference "TodoItemPackage" */;
-			productName = TodoItem;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

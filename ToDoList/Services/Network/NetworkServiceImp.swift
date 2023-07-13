@@ -8,7 +8,7 @@ final class NetworkServiceImp: NetworkService {
     private var revision: RevisionStorage = RevisionStorage()
 
     // MARK: - Inits
-    init(networkClient: NetworkClient, token: String?) {
+    init(networkClient: NetworkClient, token: String? = nil) {
         self.networkClient = networkClient
         self.token = token
     }
@@ -61,27 +61,44 @@ final class NetworkServiceImp: NetworkService {
     
     // MARK: - Private
     private func createDeleteItemRequest(_ id: String) -> HTTPRequest {
-        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)/\(id)", headers: [Constants.authorizationHeader: "Bearer \(token ?? "")", Constants.lastKnownRevisionHeader: revision.getCurrentRevision()], httpMethod: .delete)
+        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)/\(id)",
+                    headers: [Constants.authorizationHeader: "Bearer \(token ?? "")",
+                              Constants.lastKnownRevisionHeader: revision.getCurrentRevision()],
+                    httpMethod: .delete)
     }
     
     private func createUpdateItemRequest(with id: String, item: TodoItem) -> HTTPRequest {
-        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)/\(id)", headers: [Constants.authorizationHeader: "Bearer \(token ?? "")", Constants.lastKnownRevisionHeader: revision.getCurrentRevision()], body: try? JSONSerialization.data(withJSONObject: ["element": item.json]), httpMethod: .put)
+        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)/\(id)",
+                    headers: [Constants.authorizationHeader: "Bearer \(token ?? "")",
+                              Constants.lastKnownRevisionHeader: revision.getCurrentRevision()],
+                    body: try? JSONSerialization.data(withJSONObject: ["element": item.json]),
+                    httpMethod: .put)
     }
     
     private func createCreateItemRequest(with id: String, item: TodoItem) -> HTTPRequest {
-        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)", headers: [Constants.authorizationHeader: "Bearer \(token ?? "")", Constants.lastKnownRevisionHeader: revision.getCurrentRevision()], body: try? JSONSerialization.data(withJSONObject: ["element": item.json]), httpMethod: .post)
+        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)",
+                    headers: [Constants.authorizationHeader: "Bearer \(token ?? "")",
+                              Constants.lastKnownRevisionHeader: revision.getCurrentRevision()],
+                    body: try? JSONSerialization.data(withJSONObject: ["element": item.json]),
+                    httpMethod: .post)
     }
     
     private func createGetTodoItemRequest(with id: String) -> HTTPRequest {
-        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)/\(id)", headers: [Constants.authorizationHeader: "Bearer \(token ?? "")"])
+        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)/\(id)",
+                    headers: [Constants.authorizationHeader: "Bearer \(token ?? "")"])
     }
 
     private func createGetListRequest() -> HTTPRequest {
-        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)", headers: [Constants.authorizationHeader: "Bearer \(token ?? "")"])
+        HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)",
+                    headers: [Constants.authorizationHeader: "Bearer \(token ?? "")"])
     }
     
     private func createUpdateListRequest(with items: [TodoItem]) -> HTTPRequest {
-        return HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)", headers: [Constants.authorizationHeader: "Bearer \(token ?? "")", Constants.lastKnownRevisionHeader: revision.getCurrentRevision()], body: try? JSONSerialization.data(withJSONObject: ["list": items.map({$0.json})]), httpMethod: .patch)
+        return HTTPRequest(route: "\(Constants.baseurl)/\(Constants.listRouting)",
+                           headers: [Constants.authorizationHeader: "Bearer \(token ?? "")",
+                                     Constants.lastKnownRevisionHeader: revision.getCurrentRevision()],
+                           body: try? JSONSerialization.data(withJSONObject: ["list": items.map({$0.json})]),
+                           httpMethod: .patch)
     }
     
 }

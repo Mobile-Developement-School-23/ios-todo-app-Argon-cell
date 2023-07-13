@@ -16,19 +16,25 @@ final class DataManagerImp: DataManager {
     // MARK: - Public methods
     func deleteElementLocally(_ item: TodoItem) {
         storage.deleteElement(item)
-        saveListLocally()
+        if storage.getStorageType() != .sqlite {
+            saveListLocally()
+        }
         sendChanges()
     }
     
     func updateElementLocally(_ item: TodoItem) {
         storage.updateElement(item)
-        saveListLocally()
+        if storage.getStorageType() != .sqlite {
+            saveListLocally()
+        }
         sendChanges()
     }
     
     func addElementLocally(_ item: TodoItem) {
         storage.addElement(item)
-        saveListLocally()
+        if storage.getStorageType() != .sqlite {
+            saveListLocally()
+        }
         sendChanges()
     }
     
@@ -37,11 +43,11 @@ final class DataManagerImp: DataManager {
     }
     
     func saveListLocally() {
-        try? storage.save(to: mainDataBaseFileName)
+        try? storage.save()
     }
     
     func loadListLocally() {
-        try? storage.load(from: mainDataBaseFileName)
+        try? storage.load()
     }
     
     func getListNetwork(completion: @escaping (Result<([TodoItem], Revision), Error>) -> Void) {

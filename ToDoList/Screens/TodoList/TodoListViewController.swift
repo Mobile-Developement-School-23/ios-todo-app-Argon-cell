@@ -1,5 +1,4 @@
 import UIKit
-import CocoaLumberjackSwift
 
 class TodoListViewController: UIViewController {
     // MARK: - Properties

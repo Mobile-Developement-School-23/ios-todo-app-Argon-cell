@@ -1,32 +1,24 @@
 import UIKit
-import CocoaLumberjackSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // MARK: - Networking setup
+        // MARK: - Initial setup
         
         let urlSession = URLSession(configuration: .default)
         
         let networkClient = NetworkClientImp(urlSession: urlSession)
-        let networkService = NetworkServiceImp(networkClient: networkClient, token: nil)
+        let networkService = NetworkServiceImp(networkClient: networkClient)
         
-        let fileCacheService = FileCacheImp(storageType: .json)
+        let storageType = StorageType.coredata
+        let storageName = "default"
         
+        let fileCacheService = FileCacheImp(storageType: storageType, name: storageName)
+    
         let dataManagerService = DataManagerImp(storage: fileCacheService, network: networkService)
-        
-        // MARK: - Logger
-        
-        DDLog.add(DDOSLogger.sharedInstance)
 
-        let fileLogger: DDFileLogger = DDFileLogger()
-        fileLogger.rollingFrequency = 60 * 60 * 24
-        fileLogger.logFileManager.maximumNumberOfLogFiles = 7
-
-        DDLog.add(fileLogger)
-        
         // MARK: - Window setup
         
         window = UIWindow(frame: UIScreen.main.bounds)

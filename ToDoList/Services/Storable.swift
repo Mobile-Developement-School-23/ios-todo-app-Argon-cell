@@ -15,12 +15,15 @@ protocol Storable {
     func setList(_ items: [TodoItem])
     func mergeList(_ items: [TodoItem])
  
+    func save() throws
+    func load() throws
     
-    func save(to file: String) throws
-    func load(from file: String) throws
+    func getStorageType() -> StorageType
 }
 
 enum StorageType {
     case json
     case csv
+    case sqlite
+    case coredata
 }

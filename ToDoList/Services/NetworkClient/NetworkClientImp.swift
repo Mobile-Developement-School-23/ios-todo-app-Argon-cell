@@ -13,7 +13,7 @@ struct NetworkClientImp: NetworkClient {
     }
 
     // MARK: - Public
-    func processRetryListRequest(request: HTTPRequest, tryCount: Int, completion: @Sendable @escaping (Result<([TodoItem], Int), Error>) -> Void) -> Cancellable? {
+    func processRetryListRequest(request: HTTPRequest, tryCount: Int, completion: @escaping (Result<([TodoItem], Int), Error>) -> Void) -> Cancellable? {
         let delay = min(Double(Constants.minDelay * pow(1.5, Double(tryCount))), Constants.maxDelay)
         let totalDelay = delay * (1.0 + Constants.jitter)
 
@@ -27,11 +27,11 @@ struct NetworkClientImp: NetworkClient {
                             switch httpError {
                                 case .failed:
                                     DispatchQueue.global().asyncAfter(deadline: .now() + totalDelay) {
-                                        processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
+                                        _ = processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
                                     }
                                 case .serverSideError:
                                     DispatchQueue.global().asyncAfter(deadline: .now() + totalDelay) {
-                                        processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
+                                        _ = processRetryListRequest(request: request, tryCount: tryCount + 1, completion: completion)
                                     }
                                 default:
                                     completion(.failure(httpError))
@@ -40,11 +40,11 @@ struct NetworkClientImp: NetworkClient {
                             completion(.failure(error))
                         }
                     } else {
-                        processListRequest(request: HTTPRequest(route: "\(NetworkServiceImp.Constants.baseurl)/list", headers: request.headers)) { result in
+                        _ = processListRequest(request: HTTPRequest(route: "\(NetworkServiceImp.Constants.baseurl)/list", headers: request.headers)) { result in
                             switch result {
                                 case .success(let success):
                                     completion(.success(success))
-                                case .failure(let failure):
+                                case .failure(let error):
                                     completion(.failure(error))
                             }
                         }
@@ -67,11 +67,11 @@ struct NetworkClientImp: NetworkClient {
                         switch httpError {
                         case .failed:
                             DispatchQueue.global().asyncAfter(deadline: .now() + totalDelay) {
-                                processRetryItemRequest(request: request, tryCount: tryCount + 1, completion: completion)
+                                _ = processRetryItemRequest(request: request, tryCount: tryCount + 1, completion: completion)
                             }
                         case .serverSideError:
                             DispatchQueue.global().asyncAfter(deadline: .now() + totalDelay) {
-                                processRetryItemRequest(request: request, tryCount: tryCount + 1, completion: completion)
+                                _ = processRetryItemRequest(request: request, tryCount: tryCount + 1, completion: completion)
                             }
                         default:
                             completion(.failure(httpError))
@@ -119,12 +119,13 @@ struct NetworkClientImp: NetworkClient {
         return nil
     }
     
-    func processListRequest(request: HTTPRequest, completion: @escaping (Result<([TodoItem], Int), Error>) -> Void) -> Cancellable? {
+    func processListRequest(request: HTTPRequest,
+                            completion: @escaping (Result<([TodoItem], Int), Error>) -> Void) -> Cancellable? {
         do {
             let urlRequest = try createUrlRequest(from: request)
 
             let task = self.urlSession.dataTask(with: urlRequest) { data, response, error in
-                if let error = error {
+                if error != nil {
                     completion(.failure(HTTPError.failed))
                     return
                 }

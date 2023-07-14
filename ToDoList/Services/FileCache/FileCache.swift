@@ -23,5 +23,3 @@ protocol FileCache: AnyObject {
     
     func insertItemCoreData(_ item: TodoItem)
 }
-
-//FileCache

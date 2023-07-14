@@ -244,7 +244,7 @@ extension FileCacheImp {
         guard let sqliteDbConnection = sqliteConnection else { return }
         
         for row in try sqliteDbConnection.prepare("SELECT * FROM list") {
-            if let item = TodoItem.parse(table: row) {
+            if let item = TodoItem.parse(table: row as [Any]) {
                 addElement(item)
             }
         }

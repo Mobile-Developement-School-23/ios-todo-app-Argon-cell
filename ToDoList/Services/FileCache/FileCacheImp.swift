@@ -70,10 +70,6 @@ final class FileCacheImp: Storable, FileCache {
         if item != todoItems[item.id] {
             addElement(item)
         }
-        
-        if storageType == .sqlite {
-            updateItemSqlite(item)
-        }
     }
     
     func setList(_ items: [TodoItem]) {

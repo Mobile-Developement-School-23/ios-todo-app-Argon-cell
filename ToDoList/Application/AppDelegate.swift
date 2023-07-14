@@ -12,6 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let networkClient = NetworkClientImp(urlSession: urlSession)
         let networkService = NetworkServiceImp(networkClient: networkClient)
         
+        // Choose storage type & name
         let storageType = StorageType.coredata
         let storageName = "default"
         

@@ -171,7 +171,7 @@ extension TodoItem {
     }
     
     var sqlDeleteStatement: String {
-        return "DELETE FROM list WHERE (\(CodingKeys.id.rawValue) = \(self.id)"
+        return "DELETE FROM list WHERE \(CodingKeys.id.rawValue) = '\(self.id)'"
     }
     
     var sqlInsertStatement: String {
@@ -183,7 +183,6 @@ extension TodoItem {
         return "INSERT INTO list (\(CodingKeys.sqlQuery)) VALUES ('\(self.id)', '\(self.text)', '\(self.importance)', \(dateDeadline), \(isDone), '\(self.hexColor ?? "NULL")', \(dateCreation), \(dateChanging), '')"
     }
 }
-
 
 // MARK: - CoreData extension
 
@@ -209,7 +208,6 @@ extension TodoItem {
 }
 
 // MARK: - Enum
-
 
 extension TodoItem {
     private enum CSVSeparator: String {
@@ -247,5 +245,3 @@ enum CodingKeys: String {
     \(CodingKeys.lastUpdatedBy.rawValue)
     """
 }
-
-

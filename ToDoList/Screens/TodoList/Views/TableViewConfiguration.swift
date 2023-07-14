@@ -107,6 +107,7 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
     @objc func checkMarkTap(sender: UIButton) {
         var item = todoItems[sender.tag]
         item.isDone = !item.isDone
+        item.dateChanging = Date()
         self.dataManagerService.updateElementLocally(item)
         self.startLoading()
         self.dataManagerService.updateElementNetwork(item)

@@ -32,7 +32,7 @@
 		7840C27A2A350A4600EEA3AF /* ToDoItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840C2792A350A4600EEA3AF /* ToDoItemTests.swift */; };
 		787663BD2A558DFF00B6FE89 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787663BC2A558DFE00B6FE89 /* TodoListViewController.swift */; };
 		788FDA982A5EB9BE009CAE0B /* TodoItemEntity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 788FDA962A5EB9BE009CAE0B /* TodoItemEntity.xcdatamodeld */; };
-		788FDAA82A5EF586009CAE0B /* TodoItemEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788FDAA72A5EF586009CAE0B /* TodoItemEntity+CoreDataProperties.swift */; };
+		788FDAA82A5EF586009CAE0B /* TodoItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788FDAA72A5EF586009CAE0B /* TodoItemEntity.swift */; };
 		789ADF002A51B65700185D77 /* NetworkServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADEFF2A51B65700185D77 /* NetworkServiceImp.swift */; };
 		789ADF022A51B66B00185D77 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADF012A51B66B00185D77 /* NetworkService.swift */; };
 		789ADF282A51B6DC00185D77 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADF1C2A51B6DC00185D77 /* NetworkClient.swift */; };
@@ -52,7 +52,6 @@
 		78FE88CA2A478A4C00A059FA /* TodoItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE88C92A478A4C00A059FA /* TodoItemTableViewCell.swift */; };
 		78FE88CE2A499B1700A059FA /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE88CD2A499B1700A059FA /* HeaderView.swift */; };
 		78FE88D22A4A216B00A059FA /* TableViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE88D12A4A216B00A059FA /* TableViewConfiguration.swift */; };
-		E5B44BCFDDE2D2B90334267A /* Pods_ToDoListTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE64E7760229C0801C8DB3CC /* Pods_ToDoListTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,7 +95,7 @@
 		7840C2792A350A4600EEA3AF /* ToDoItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemTests.swift; sourceTree = "<group>"; };
 		787663BC2A558DFE00B6FE89 /* TodoListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		788FDA972A5EB9BE009CAE0B /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		788FDAA72A5EF586009CAE0B /* TodoItemEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TodoItemEntity+CoreDataProperties.swift"; path = "/Users/ilgamnafikov/ios-todo-app-Argon-cell/ToDoList/Extensions/TodoItemEntity+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		788FDAA72A5EF586009CAE0B /* TodoItemEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TodoItemEntity.swift; path = "/Users/ilgamnafikov/ios-todo-app-Argon-cell/ToDoList/Extensions/TodoItemEntity.swift"; sourceTree = "<absolute>"; };
 		789ADEFF2A51B65700185D77 /* NetworkServiceImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceImp.swift; sourceTree = "<group>"; };
 		789ADF012A51B66B00185D77 /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		789ADF1C2A51B6DC00185D77 /* NetworkClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
@@ -117,7 +116,6 @@
 		78FE88D12A4A216B00A059FA /* TableViewConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewConfiguration.swift; sourceTree = "<group>"; };
 		8145E2B7213EC3A7E610024D /* Pods-ToDoListTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoListTests.release.xcconfig"; path = "Target Support Files/Pods-ToDoListTests/Pods-ToDoListTests.release.xcconfig"; sourceTree = "<group>"; };
 		F83CB0799E2CF8AD3D6424C4 /* Pods-ToDoList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList/Pods-ToDoList.debug.xcconfig"; sourceTree = "<group>"; };
-		FE64E7760229C0801C8DB3CC /* Pods_ToDoListTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoListTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,7 +132,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5B44BCFDDE2D2B90334267A /* Pods_ToDoListTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,7 +172,6 @@
 		782D5ADA2A467F3E00777655 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				788FDAA72A5EF586009CAE0B /* TodoItemEntity+CoreDataProperties.swift */,
 				789FBF592A5DF17300C76855 /* Log.swift */,
 				782D5ADB2A467F3E00777655 /* Date.swift */,
 				782D5ADC2A467F3E00777655 /* UIColor.swift */,
@@ -250,6 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				788FDA962A5EB9BE009CAE0B /* TodoItemEntity.xcdatamodeld */,
+				788FDAA72A5EF586009CAE0B /* TodoItemEntity.swift */,
 				7840C2582A33B6FF00EEA3AF /* TodoItem.swift */,
 			);
 			path = Models;
@@ -362,7 +359,6 @@
 			isa = PBXGroup;
 			children = (
 				5E501722941070B9C13D2E0A /* Pods_ToDoList.framework */,
-				FE64E7760229C0801C8DB3CC /* Pods_ToDoListTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -563,7 +559,7 @@
 				78FE88CE2A499B1700A059FA /* HeaderView.swift in Sources */,
 				787663BD2A558DFF00B6FE89 /* TodoListViewController.swift in Sources */,
 				7832A25A2A4D06C400DE58A8 /* CustomTransition.swift in Sources */,
-				788FDAA82A5EF586009CAE0B /* TodoItemEntity+CoreDataProperties.swift in Sources */,
+				788FDAA82A5EF586009CAE0B /* TodoItemEntity.swift in Sources */,
 				782D5AD02A467E6E00777655 /* SeparatorLineView.swift in Sources */,
 				782D5AE32A467F3E00777655 /* UIViewController.swift in Sources */,
 				788FDA982A5EB9BE009CAE0B /* TodoItemEntity.xcdatamodeld in Sources */,

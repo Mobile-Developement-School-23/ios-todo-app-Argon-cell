@@ -59,26 +59,10 @@ final class FileCacheImp: Storable, FileCache {
             if item != oldItem {
                 if item.dateChanging >= oldItem.dateChanging {
                     todoItems[item.id] = item
-//                    switch storageType {
-//                        case .sqlite:
-//                            insertItemSqlite(item)
-//                        case .coredata:
-//                            addItemToCoreData(item)
-//                        default:
-//                            break
-//                    }
                 }
             }
         } else {
             todoItems[item.id] = item
-//            switch storageType {
-//                case .sqlite:
-//                    insertItemSqlite(item)
-//                case .coredata:
-//                    addItemToCoreData(item)
-//                default:
-//                    break
-//            }
         }
     }
     
@@ -108,8 +92,13 @@ final class FileCacheImp: Storable, FileCache {
     func deleteElement(_ item: TodoItem) {
         todoItems[item.id] = nil
         
-        if storageType == .sqlite {
-            deleteItemSqlite(item)
+        switch storageType {
+            case .sqlite:
+                deleteItemSqlite(item)
+            case .coredata:
+                deleteItemCoreData(item)
+            default:
+                break
         }
     }
     
@@ -249,8 +238,8 @@ extension FileCacheImp {
         for item in todoItems.values {
             do {
                 try sqliteDbConnection.execute(item.sqlReplaceStatement)
-            } catch let error {
-                Log.error("Ошибка в SQLite replace элементов / " + error.localizedDescription)
+            } catch {
+                throw FileCacheErrors.sqliteSaveError
             }
         }
     }
@@ -269,8 +258,8 @@ extension FileCacheImp {
         guard let sqliteDbConnection = sqliteConnection else { return }
         do {
             try sqliteDbConnection.execute(item.sqlReplaceStatement)
-        } catch let error {
-            Log.error("Ошибка в SQLite replace одного элемента / " + error.localizedDescription)
+        } catch {
+            Log.error(FileCacheErrors.sqliteReplaceError.localizedDescription)
         }
     }
     
@@ -278,8 +267,8 @@ extension FileCacheImp {
         guard let sqliteDbConnection = sqliteConnection else { return }
         do {
             try sqliteDbConnection.execute(item.sqlDeleteStatement)
-        } catch let error {
-            Log.error("Ошибка в SQLite delete одного элемента / " + error.localizedDescription)
+        } catch {
+            Log.error(FileCacheErrors.sqliteDeleteError.localizedDescription)
         }
     }
     
@@ -287,12 +276,12 @@ extension FileCacheImp {
         guard let sqliteDbConnection = sqliteConnection else { return }
         do {
             try sqliteDbConnection.execute(item.sqlReplaceStatement)
-        } catch let error {
-            Log.error("Ошибка в SQLite insert одного элемента / " + error.localizedDescription)
+        } catch {
+            Log.error(FileCacheErrors.sqliteInsertError.localizedDescription)
         }
     }
     
-    enum SqliteDataModel {
+    private enum SqliteDataModel {
         static let list = Table("list")
         static let id = Expression<String>(CodingKeys.id.rawValue)
         static let text = Expression<String>(CodingKeys.text.rawValue)
@@ -349,12 +338,10 @@ extension FileCacheImp {
 //            }
         }
         
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                throw FileCacheErrors.coreDataSaveContextError
-            }
+        do {
+            try context.save()
+        } catch {
+            throw FileCacheErrors.coreDataSaveContextError
         }
     }
     
@@ -373,22 +360,73 @@ extension FileCacheImp {
         }
     }
     
-//    func addItemToCoreData(_ item: TodoItem) {
-//        guard let context = coreDataContainer?.viewContext else {
-//            Log.error(FileCacheErrors.coreDataContainerNotFound.localizedDescription)
-//            return
-//        }
-//
-//        guard let todoItemEntityDescription = NSEntityDescription.entity(forEntityName: Constants.coreDataModelName, in: context) else {
-//            Log.error(FileCacheErrors.coreDataModelDescriptionFailed.localizedDescription)
-//            return
-//        }
-//
-//        let todoItemEntity = entity(with: item, description: todoItemEntityDescription, context: context)
-//    }
+    func insertItemCoreData(_ item: TodoItem) {
+        guard let context = coreDataContainer?.viewContext else {
+            Log.error(FileCacheErrors.coreDataContainerNotFound.localizedDescription)
+            return
+        }
+
+        guard let todoItemEntityDescription = NSEntityDescription.entity(forEntityName: Constants.coreDataModelName, in: context) else {
+            Log.error(FileCacheErrors.coreDataModelDescriptionFailed.localizedDescription)
+            return
+        }
+
+        createEntity(with: item, description: todoItemEntityDescription, context: context)
+        
+        do {
+            try context.save()
+        } catch {
+            Log.error(FileCacheErrors.coreDataSaveContextError.localizedDescription)
+        }
+    }
     
+    func deleteItemCoreData(_ item: TodoItem) {
+        guard let context = coreDataContainer?.viewContext else {
+            Log.error(FileCacheErrors.coreDataContainerNotFound.localizedDescription)
+            return
+        }
+
+        let fetchRequest = TodoItemEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id = %@", item.id as NSString)
+
+        do {
+            let fetchResults = try context.fetch(fetchRequest)
+            if fetchResults.count != 0 {
+                let fetchedItemEntity = fetchResults[0]
+                context.delete(fetchedItemEntity)
+            }
+        } catch {
+            Log.error(FileCacheErrors.coreDataDeleteError.localizedDescription)
+        }
+        
+        do {
+            try context.save()
+        } catch {
+            Log.error(FileCacheErrors.coreDataSaveContextError.localizedDescription)
+        }
+    }
     
-    func createEntity(with item: TodoItem, description: NSEntityDescription, context: NSManagedObjectContext) {
+    func updateItemCoreData(_ item: TodoItem) {
+        guard let context = coreDataContainer?.viewContext else {
+            Log.error(FileCacheErrors.coreDataContainerNotFound.localizedDescription)
+            return
+        }
+
+        guard let todoItemEntityDescription = NSEntityDescription.entity(forEntityName: Constants.coreDataModelName, in: context) else {
+            Log.error(FileCacheErrors.coreDataModelDescriptionFailed.localizedDescription)
+            return
+        }
+
+        createEntity(with: item, description: todoItemEntityDescription, context: context)
+        
+        do {
+            try context.save()
+        } catch {
+            Log.error(FileCacheErrors.coreDataSaveContextError.localizedDescription)
+        }
+    }
+    
+    private func createEntity(with item: TodoItem, description: NSEntityDescription, context: NSManagedObjectContext) {
         let todoItemEntity = TodoItemEntity(entity: description, insertInto: context)
         
         todoItemEntity.id = item.id
@@ -409,16 +447,23 @@ enum FileCacheErrors: String, Error {
     case jSONConvertationError = "При конвертацией JSON файла произошла ошибка"
     case pathToFileNotFound = "Путь до конечного файла не найден"
     case writeFileError = "При записи файла произошла ошибка"
+    
     case sqliteConnectionCreateError = "Ошибка при создании SQLite базы данных"
+    case sqliteInsertError = "Ошибка в SQLite insert элемента"
+    case sqliteDeleteError = "Ошибка в SQLite delete элемента"
+    case sqliteReplaceError = "Ошибка в SQLite replace элемента"
+    case sqliteSaveError = "Ошибка в SQLite сохранении элементов"
+    
     case coredataContainerCreateError = "Ошибка при загрузке хранилища Coredata"
     case coreDataContainerNotFound = "CoreData container не найден"
     case coreDataModelDescriptionFailed = "Не удалось создать Description модели"
     case coreDataSaveContextError = "Не удалось сохранить изменения CoreData"
     case coreDataLoadFromContextError = "Не удалось загрузить данные из CoreData"
+    case coreDataDeleteError = "Не удалось удалить элемент CoreData"
 }
 
-extension FileCacheImp {
-    private enum FileFormat: String {
+private extension FileCacheImp {
+    enum FileFormat: String {
         case csv = ".csv"
         case json = ".json"
         case db = ".db"

@@ -14,12 +14,14 @@ extension TodoListViewController {
                 currentTodoItem.isDone = !currentTodoItem.isDone
                 currentTodoItem.dateChanging = Date()
                 self.dataManagerService.updateElementLocally(currentTodoItem)
+                self.tableView.reloadData()
                 self.startLoading()
                 self.dataManagerService.updateElementNetwork(currentTodoItem)
             }
             
             let deleteAction = UIAction(title: deleteActionText, image: .redTrashIcon) { _ in
                 self.dataManagerService.deleteElementLocally(currentTodoItem)
+                self.tableView.reloadData()
                 self.startLoading()
                 self.dataManagerService.deleteElementNetwork(currentTodoItem)
             }

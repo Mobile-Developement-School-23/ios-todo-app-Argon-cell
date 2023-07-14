@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 @objc(TodoItemEntity)
 public class TodoItemEntity: NSManagedObject {
 
@@ -29,7 +28,6 @@ extension TodoItemEntity {
     @NSManaged public var id: String?
     @NSManaged public var importance: String?
     @NSManaged public var text: String?
-    
     
     var importanceValue: Importance {
         get {

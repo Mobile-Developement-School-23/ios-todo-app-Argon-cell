@@ -5,8 +5,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // MARK: - Initial setup
         
+        // MARK: - Initial setup
         let urlSession = URLSession(configuration: .default)
         
         let networkClient = NetworkClientImp(urlSession: urlSession)

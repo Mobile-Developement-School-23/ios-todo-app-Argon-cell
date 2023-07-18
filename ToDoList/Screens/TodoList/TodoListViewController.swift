@@ -31,7 +31,6 @@ class TodoListViewController: UIViewController {
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: CGRect(), style: .insetGrouped)
         tableView.register(TodoItemTableViewCell.self, forCellReuseIdentifier: TodoItemTableViewCell.identifier)
-//        tableView.tableHeaderView = headerView
         tableView.backgroundColor = .iosPrimaryBack
                 
         return tableView

@@ -13,6 +13,5 @@ extension UIImage {
     static var chevroneRightIcon: UIImage? { return UIImage(named: "chevrone.right") }
     static var calendarIcon: UIImage? { return UIImage(systemName: "calendar")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal) }
     static var offlineIcon: UIImage? { return UIImage(systemName: "icloud.slash.fill")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal) }
-//    static var logoutIcon: UIImage? { return UIImage(systemName: "rectangle.portrait.and.arrow.right.fill")?.withTintColor(.systemBlue ?? .blue, renderingMode: .alwaysOriginal) }
     static var plusIcon: UIImage? { return UIImage(named: "plus.icon") }
 }

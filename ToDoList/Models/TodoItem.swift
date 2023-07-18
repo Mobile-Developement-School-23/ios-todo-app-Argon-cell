@@ -38,7 +38,6 @@ extension TodoItem {
               let text = js[CodingKeys.text.rawValue] as? String,
               let dateCreation = (js[CodingKeys.dateСreation.rawValue] as? Double).flatMap({ Date(timeIntervalSince1970: $0) }),
               let dateChanging = (js[CodingKeys.dateChanging.rawValue] as? Double).flatMap({ Date(timeIntervalSince1970: $0) })
-
         else {
             return nil
         }

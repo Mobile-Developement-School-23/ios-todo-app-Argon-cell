@@ -151,7 +151,7 @@ final class DataManagerImp: DataManager {
             }
         }
     }
-        
+
     func updateNetworkToken(_ token: String?) {
         network.updateToken(token: token)
     }
@@ -176,7 +176,7 @@ final class DataManagerImp: DataManager {
     }
     
     // MARK: - Private methods
-    
+
     private func sendChanges() {
         if let dataDelegate = dataDelegate {
             dataDelegate(storage.getList())

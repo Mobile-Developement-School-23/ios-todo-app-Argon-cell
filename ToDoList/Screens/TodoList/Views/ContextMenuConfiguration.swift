@@ -43,12 +43,6 @@ extension TodoListViewController {
         vc.setUserInteractionDisabled()
         show(vc, sender: nil)
     }
-    
-//    func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
-//        animator?.addCompletion {
-//            tableView.reloadData()
-//        }
-//    }
 }
 
 private let makeDoneActionText = "Make done"

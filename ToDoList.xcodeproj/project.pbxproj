@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		162881C78F534E4D14C925E8 /* Pods_ToDoList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E501722941070B9C13D2E0A /* Pods_ToDoList.framework */; };
+		780858BE2A66B72900243024 /* TodoItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780858BD2A66B72900243024 /* TodoItemEntity.swift */; };
 		782D5AC52A467DFF00777655 /* TodoItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5AC42A467DFF00777655 /* TodoItemViewController.swift */; };
 		782D5ACD2A467E6E00777655 /* BodyLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5AC92A467E6E00777655 /* BodyLabelView.swift */; };
 		782D5ACE2A467E6E00777655 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782D5ACA2A467E6E00777655 /* TextView.swift */; };
@@ -32,7 +33,6 @@
 		7840C27A2A350A4600EEA3AF /* ToDoItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7840C2792A350A4600EEA3AF /* ToDoItemTests.swift */; };
 		787663BD2A558DFF00B6FE89 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787663BC2A558DFE00B6FE89 /* TodoListViewController.swift */; };
 		788FDA982A5EB9BE009CAE0B /* TodoItemEntity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 788FDA962A5EB9BE009CAE0B /* TodoItemEntity.xcdatamodeld */; };
-		788FDAA82A5EF586009CAE0B /* TodoItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788FDAA72A5EF586009CAE0B /* TodoItemEntity.swift */; };
 		789ADF002A51B65700185D77 /* NetworkServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADEFF2A51B65700185D77 /* NetworkServiceImp.swift */; };
 		789ADF022A51B66B00185D77 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADF012A51B66B00185D77 /* NetworkService.swift */; };
 		789ADF282A51B6DC00185D77 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADF1C2A51B6DC00185D77 /* NetworkClient.swift */; };
@@ -68,6 +68,7 @@
 		07625AEE4F0FA833CF7209DD /* Pods-ToDoList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList.release.xcconfig"; path = "Target Support Files/Pods-ToDoList/Pods-ToDoList.release.xcconfig"; sourceTree = "<group>"; };
 		4137FFB339A5FB0CC5789C75 /* Pods-ToDoListTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoListTests.debug.xcconfig"; path = "Target Support Files/Pods-ToDoListTests/Pods-ToDoListTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5E501722941070B9C13D2E0A /* Pods_ToDoList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		780858BD2A66B72900243024 /* TodoItemEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoItemEntity.swift; sourceTree = "<group>"; };
 		782D5AC42A467DFF00777655 /* TodoItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemViewController.swift; sourceTree = "<group>"; };
 		782D5AC92A467E6E00777655 /* BodyLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyLabelView.swift; sourceTree = "<group>"; };
 		782D5ACA2A467E6E00777655 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -95,7 +96,6 @@
 		7840C2792A350A4600EEA3AF /* ToDoItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemTests.swift; sourceTree = "<group>"; };
 		787663BC2A558DFE00B6FE89 /* TodoListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		788FDA972A5EB9BE009CAE0B /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		788FDAA72A5EF586009CAE0B /* TodoItemEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TodoItemEntity.swift; path = "/Users/ilgamnafikov/ios-todo-app-Argon-cell/ToDoList/Extensions/TodoItemEntity.swift"; sourceTree = "<absolute>"; };
 		789ADEFF2A51B65700185D77 /* NetworkServiceImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceImp.swift; sourceTree = "<group>"; };
 		789ADF012A51B66B00185D77 /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		789ADF1C2A51B6DC00185D77 /* NetworkClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				788FDA962A5EB9BE009CAE0B /* TodoItemEntity.xcdatamodeld */,
-				788FDAA72A5EF586009CAE0B /* TodoItemEntity.swift */,
+				780858BD2A66B72900243024 /* TodoItemEntity.swift */,
 				7840C2582A33B6FF00EEA3AF /* TodoItem.swift */,
 			);
 			path = Models;
@@ -549,6 +549,7 @@
 				782D5AE02A467F3E00777655 /* Date.swift in Sources */,
 				789FBF532A59EDA800C76855 /* Storable.swift in Sources */,
 				789ADF002A51B65700185D77 /* NetworkServiceImp.swift in Sources */,
+				780858BE2A66B72900243024 /* TodoItemEntity.swift in Sources */,
 				789ADF2A2A51B6DC00185D77 /* HTTPRequest.swift in Sources */,
 				789ADF292A51B6DC00185D77 /* NetworkClientImp.swift in Sources */,
 				7840C2592A33B6FF00EEA3AF /* TodoItem.swift in Sources */,
@@ -559,7 +560,6 @@
 				78FE88CE2A499B1700A059FA /* HeaderView.swift in Sources */,
 				787663BD2A558DFF00B6FE89 /* TodoListViewController.swift in Sources */,
 				7832A25A2A4D06C400DE58A8 /* CustomTransition.swift in Sources */,
-				788FDAA82A5EF586009CAE0B /* TodoItemEntity.swift in Sources */,
 				782D5AD02A467E6E00777655 /* SeparatorLineView.swift in Sources */,
 				782D5AE32A467F3E00777655 /* UIViewController.swift in Sources */,
 				788FDA982A5EB9BE009CAE0B /* TodoItemEntity.xcdatamodeld in Sources */,

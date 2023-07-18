@@ -10,6 +10,13 @@ options:
   generateEmptyDirectories: true
   findCarthageFrameworks: true
   minimumXcodeGenVersion: '2.18.0'
+  postGenCommand: pod install
+#
+#post_gen:
+#  - name: Install Pods
+#    script: |
+#      cd ./
+#      pod install
 
 ## configs section ##
 
@@ -38,11 +45,8 @@ targets:
         INFOPLIST_FILE: ToDoList/SupportingFiles/ToDoList-Info.plist
         GENERATE_INFOPLIST_FILE: Yes
     sources:
-       - path: ../ToDoList
+       - path: ./ToDoList
     scheme:
-      configVariants:
-      # coverageTargets:
-        - SwiftLint
       testTargets:
         - ToDoListTests
     dependencies:
@@ -61,7 +65,7 @@ targets:
     type: bundle.unit-test
     platform: iOS
     sources:
-       - path: ../ToDoListTests
+       - path: ./ToDoListTests
     settings:
       base:
         GENERATE_INFOPLIST_FILE: Yes

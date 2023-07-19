@@ -46,7 +46,9 @@ class ColorPickerView: UIView {
 
         guard let selectedColor = viewLayer.colorOfPoint(point: location) else { return }
         if selectedColor == UIColor(red: 0, green: 0, blue: 0, alpha: 0) { return }
-        delegate?.colorPickerViewDidSelectColor(self, color: selectedColor)
+        DispatchQueue.main.async {
+            self.delegate?.colorPickerViewDidSelectColor(self, color: selectedColor)
+        }
     }
 }
 

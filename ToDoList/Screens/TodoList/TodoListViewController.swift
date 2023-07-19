@@ -1,5 +1,4 @@
 import UIKit
-import CocoaLumberjackSwift
 
 class TodoListViewController: UIViewController {
     // MARK: - Properties
@@ -8,7 +7,7 @@ class TodoListViewController: UIViewController {
     var doneTodoItems: [TodoItem] = []
     var todoItems: [TodoItem] = []
     
-    lazy var headerView = HeaderView(frame: CGRect(x: 0, y: 0, width: 0, height: 50))
+    lazy var headerView = HeaderView(frame: CGRect(x: edgeSize, y: -edgeSize, width: view.bounds.width - edgeSize * 5, height: 50))
     
     lazy var plusButton: UIButton = {
         let image = UIImage.plusIcon
@@ -32,7 +31,6 @@ class TodoListViewController: UIViewController {
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: CGRect(), style: .insetGrouped)
         tableView.register(TodoItemTableViewCell.self, forCellReuseIdentifier: TodoItemTableViewCell.identifier)
-        tableView.tableHeaderView = headerView
         tableView.backgroundColor = .iosPrimaryBack
                 
         return tableView
@@ -80,36 +78,18 @@ class TodoListViewController: UIViewController {
 
         let menuBtn = UIButton(type: .custom)
         menuBtn.frame = CGRect(x: 0.0, y: 0.0, width: 20, height: 20)
-        menuBtn.setImage(.logoutIcon, for: .normal)
+        menuBtn.setAttributedTitle(NSAttributedString(string: "Выйти", attributes: [NSAttributedString.Key.font: UIFont.subhead ?? UIFont.preferredFont(forTextStyle: .subheadline)]), for: .normal)
+        menuBtn.setTitleColor(.customBlue ?? .blue, for: .normal)
         menuBtn.addTarget(self, action: #selector(logoutPressed), for: .touchUpInside)
 
         navigationItem.rightBarButtonItem =  UIBarButtonItem(customView: menuBtn)
         view.backgroundColor = .iosPrimaryBack
         
-        configureDataTable(dataManagerService.loadListLocally())
+        dataManagerService.loadListLocally()
+        configureDataTable(dataManagerService.getListLocally())
         
-        dataManagerService.getListNetwork { [weak self] result in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                    case .success:
-                        self.headerView.hideNetworkSyncErrorLabel()
-                        self.dataManagerService.updateListNetwork { [weak self] result in
-                            guard let self = self else { return }
-                            DispatchQueue.main.async {
-                                switch result {
-                                    case .success(let updatedMergedItems):
-                                        self.configureDataTable(updatedMergedItems)
-                                    case .failure:
-                                        break
-                                }
-                            }
-                        }
-                    case .failure:
-                        self.headerView.showNetworkSyncErrorLabel()
-                }
-            }
-        }
+        startLoading()
+        dataManagerService.makeSynchronization()
         
         dataManagerService.dataDelegate = { preparedItems in
             DispatchQueue.main.async {
@@ -117,15 +97,13 @@ class TodoListViewController: UIViewController {
             }
         }
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сетевые тесты", style: .done, target: self, action: #selector(showConcurrencuMenuTap))
-        
         headerView.change = { areDoneCellsHiden in
             if areDoneCellsHiden {
                 self.removeDoneTodoItems()
-                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+                self.tableView.reloadData()
             } else {
                 self.addDoneItems()
-                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+                self.tableView.reloadData()
             }
         }
         
@@ -157,8 +135,7 @@ class TodoListViewController: UIViewController {
             headerView.update(todoItems.filter { $0.isDone }.count)
         }
         self.todoItems.append(TodoItem(text: "", importance: .important, dateСreation: Date.distantPast))
-
-        self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+        self.tableView.reloadData()
         self.stopLoading()
     }
     
@@ -217,11 +194,6 @@ class TodoListViewController: UIViewController {
         }
         vc.setupNavigatorButtons()
         present(navigationController, animated: true, completion: nil)
-    }
-    
-    
-    @objc func showConcurrencuMenuTap(sender: UIBarButtonItem) {
-        navigationController?.present(ConcurrencyMenuViewController(dataHolder: DataHolder()), animated: true)
     }
 }
 

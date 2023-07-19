@@ -206,7 +206,7 @@ final class TodoItemViewController: UIViewController {
         }
         
         if UIDevice.current.orientation.isLandscape && currentTodoItem != nil {
-            textHeightConstraint?.constant = UIScreen.main.bounds.height - safeAreaHeights - 2 * edgeSize - (UIApplication.shared.windows.first?.windowScene?.keyWindow?.safeAreaInsets.bottom ?? 0)
+            textHeightConstraint?.constant = UIScreen.main.bounds.height - safeAreaHeights - 2 * edgeSize - (view.window?.windowScene?.keyWindow?.safeAreaInsets.bottom ?? 0)
             if !settingsStackView.constraints.isEmpty && !deleteButton.constraints.isEmpty {
                 settingsAndDeleteConstraints = settingsStackView.constraints + deleteButton.constraints
                 settingsStackView.isHidden = true
@@ -483,8 +483,8 @@ extension TodoItemViewController {
     
     private func setUpLandcsapeConstraints() {
         // Landscape constraints setup
-        if UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isLandscape == true, currentTodoItem != nil {
-            textHeightConstraint?.constant = UIScreen.main.bounds.height - safeAreaHeights - 2 * edgeSize - (UIApplication.shared.windows.first?.windowScene?.keyWindow?.safeAreaInsets.bottom ?? 0)
+        if UIDevice.current.orientation.isLandscape == true, currentTodoItem != nil {
+            textHeightConstraint?.constant = UIScreen.main.bounds.height - safeAreaHeights - 2 * edgeSize - (view.window?.windowScene?.keyWindow?.safeAreaInsets.bottom ?? 0)
             if !settingsStackView.constraints.isEmpty {
                 settingsAndDeleteConstraints = settingsStackView.constraints + deleteButton.constraints
             }
@@ -610,13 +610,13 @@ extension TodoItemViewController: UITextViewDelegate {
 
 extension TodoItemViewController: ColorPickerDelegate {
     func colorPickerViewDidSelectColor(_ view: ColorPickerView, color: UIColor) {
-        selectedColorButton.backgroundColor = color
-        hexColorLabel.text = color.toHex()
-        colorBrightnessSlider.value = 0.5
-        if textView.text != placeholderTitleForTextView && textView.text != "" {
-            textView.textColor = color
+        self.selectedColorButton.backgroundColor = color
+        self.hexColorLabel.text = color.toHex()
+        self.colorBrightnessSlider.value = 0.5
+        if self.textView.text != placeholderTitleForTextView && self.textView.text != "" {
+            self.textView.textColor = color
         } else {
-            textView.textColor = .customSecondaryLabel
+            self.textView.textColor = .customSecondaryLabel
         }
     }
 }

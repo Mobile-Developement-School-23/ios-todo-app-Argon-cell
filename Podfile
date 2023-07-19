@@ -7,13 +7,10 @@ target 'ToDoList' do
 
   # Pods for ToDoList
   pod 'SwiftLint'
+ 
 
   target 'ToDoListTests' do
     inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'ToDoListUITests' do
     # Pods for testing
   end
 

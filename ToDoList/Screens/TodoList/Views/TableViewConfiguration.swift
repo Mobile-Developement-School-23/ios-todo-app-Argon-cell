@@ -17,9 +17,10 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         if self.todoItems[indexPath.row].dateСreation != .distantPast {
             let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, handler in
                 guard let self = self else { return }
-                self.dataManagerService.deleteElementLocally(self.todoItems[indexPath.row])
+                let item = self.todoItems[indexPath.row]
+                self.dataManagerService.deleteElementLocally(item)
                 self.startLoading()
-                self.dataManagerService.deleteElementNetwork(self.todoItems[indexPath.row])
+                self.dataManagerService.deleteElementNetwork(item)
                 handler(true)
             }
             deleteAction.image = .whiteTrashIcon
@@ -38,6 +39,7 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
                 guard let self = self else { return }
                 var item = self.todoItems[indexPath.row]
                 item.isDone = !item.isDone
+                item.dateChanging = Date()
                 self.dataManagerService.updateElementLocally(item)
                 self.startLoading()
                 self.dataManagerService.updateElementNetwork(item)
@@ -94,9 +96,18 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource {
         present(navigationController, animated: true, completion: nil)
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+            return 50
+    }
+    
     @objc func checkMarkTap(sender: UIButton) {
         var item = todoItems[sender.tag]
         item.isDone = !item.isDone
+        item.dateChanging = Date()
         self.dataManagerService.updateElementLocally(item)
         self.startLoading()
         self.dataManagerService.updateElementNetwork(item)

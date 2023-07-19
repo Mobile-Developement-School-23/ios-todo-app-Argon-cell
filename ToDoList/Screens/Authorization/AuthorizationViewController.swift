@@ -110,6 +110,7 @@ class AuthorizationViewController: UIViewController {
         tokenTextView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         tokenTextView.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        tokenTextView.heightAnchor.constraint(equalToConstant: 55).isActive = true
     }
     
     // MARK: - Objc methods

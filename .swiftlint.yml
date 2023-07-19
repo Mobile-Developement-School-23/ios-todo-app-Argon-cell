@@ -19,3 +19,7 @@ variable_name:
     warning: 1
 
 force_cast: warning
+
+function_body_length:
+- 60 # warning
+- 100 # error

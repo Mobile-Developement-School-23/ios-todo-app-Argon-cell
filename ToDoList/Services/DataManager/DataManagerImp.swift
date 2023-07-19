@@ -1,6 +1,6 @@
 import Foundation
 
-class DataManagerImp: DataManager {
+final class DataManagerImp: DataManager {
     // MARK: - Properties
     var storage: Storable
     var network: NetworkService
@@ -14,135 +14,131 @@ class DataManagerImp: DataManager {
     }
     
     // MARK: - Public methods
-    func deleteElementLocally(_ item: TodoItem) -> [TodoItem] {
-        storage.remove(item)
-        try? storage.save(to: mainDataBaseFileName)
-        return storage.getItems()
-    }
-    
-    func updateElementLocally(_ item: TodoItem) -> [TodoItem] {
-        storage.update(item)
-        try? storage.save(to: mainDataBaseFileName)
-        return storage.getItems()
-    }
-        
-    func loadListLocally() -> [TodoItem] {
-        try? storage.load(from: mainDataBaseFileName)
-        if let dataDelegate = self.dataDelegate {
-            dataDelegate(self.storage.getItems())
+    func deleteElementLocally(_ item: TodoItem) {
+        storage.deleteElement(item)
+        if storage.getStorageType() != .sqlite {
+            saveListLocally()
         }
-        return storage.getItems()
+        sendChanges()
     }
     
-    func getListNetwork(completion: @escaping (Result<[TodoItem], Error>) -> Void) {
-        network.getList { [weak self] result in
-            guard let self = self else { return }
+    func updateElementLocally(_ item: TodoItem) {
+        storage.updateElement(item)
+        if storage.getStorageType() != .sqlite {
+            saveListLocally()
+        }
+        sendChanges()
+    }
+    
+    func addElementLocally(_ item: TodoItem) {
+        storage.addElement(item)
+        if storage.getStorageType() != .sqlite {
+            saveListLocally()
+        }
+        sendChanges()
+    }
+    
+    func getListLocally() -> [TodoItem] {
+        return storage.getList()
+    }
+    
+    func saveListLocally() {
+        try? storage.save()
+    }
+    
+    func loadListLocally() {
+        try? storage.load()
+    }
+    
+    func getListNetwork(completion: @escaping (Result<([TodoItem], Revision), Error>) -> Void) {
+        network.getList { result in
             switch result {
-                case .success(let (loadedItems, loadedRevision)):
-                    self.storage.update(loadedItems)
-                    try? self.storage.save(to: mainDataBaseFileName)
-                    self.network.updateRevision(loadedRevision)
-                    self.storage.isDirty = false
-                    completion(.success(loadedItems))
+                case .success(let result):
+                    completion(.success(result))
                 case .failure(let error):
-                    self.storage.isDirty = true
                     completion(.failure(error))
             }
         }
     }
     
-    func updateListNetwork(completion: @escaping (Result<[TodoItem], Error>) -> Void) {
-        network.updateList(with: storage.getItems()) { [weak self] result in
-            guard let self = self else { return }
+    func patchListNetwork(_ items: [TodoItem], completion: @escaping (Result<([TodoItem], Revision), Error>) -> Void) {
+        network.updateList(with: items) { result in
             switch result {
-                case .success(let (loadedItems, loadedRevision)):
-                    self.storage.setItems(loadedItems)
-                    try? self.storage.save(to: mainDataBaseFileName)
-                    self.network.updateRevision(loadedRevision)
-                    self.storage.isDirty = false
-                    completion(.success(loadedItems))
+                case .success(let result):
+                    completion(.success(result))
                 case .failure(let error):
-                    self.storage.isDirty = true
                     completion(.failure(error))
+            }
+        }
+    }
+    
+    func makeSynchronization() {
+        getListNetwork { result in
+            switch result {
+                case .success(let (fetchedItems, fetchedRevision)):
+                if Set(fetchedItems) != Set(self.storage.getList()) {
+                        self.storage.mergeList(fetchedItems)
+                        self.saveListLocally()
+                        self.network.updateRevision(fetchedRevision)
+                        let intersaction = Set(self.storage.getList()).intersection(Set(fetchedItems))
+                        let union = Set(self.storage.getList()).union(intersaction)
+                       
+                        self.patchListNetwork(Array(union)) { result in
+                            switch result {
+                            case .success(let (mergedServerItems, mergedServerRevision)):
+                                self.storage.markeredToUpdateItems = [:]
+                                self.storage.markeredToDeleteItems = [:]
+                                self.network.updateRevision(mergedServerRevision)
+                                self.storage.setList(mergedServerItems)
+                                self.saveListLocally()
+                                self.storage.isDirty = false
+                                self.sendChanges()
+                            case .failure:
+                                self.storage.isDirty = true
+                                self.sendChanges()
+                            }
+                        }
+                    } else {
+                        self.network.updateRevision(fetchedRevision)
+                        self.storage.isDirty = false
+                        self.sendChanges()
+                    }
+                case .failure:
+                    self.storage.isDirty = true
+                self.sendChanges()
             }
         }
     }
     
     func addElementNetwork(_ item: TodoItem) {
-        if storage.isDirty {
-            updateListNetwork { _ in
-                if let dataDelegate = self.dataDelegate {
-                    dataDelegate(self.storage.getItems())
-                }
-            }
-        } else {
-            network.createTodoItem(with: item.id, item: item) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                    case .success:
-                        self.updateRevision(self.network.getRevision() + 1)
-                    case .failure:
-                        self.storage.isDirty = true
-                }
-                
-                if let dataDelegate = self.dataDelegate {
-                    dataDelegate(self.storage.getItems())
-                }
-            }
-        }
+        storage.markeredToUpdateItems[item.id] = 1
+        makeSynchronization()
     }
     
     func deleteElementNetwork(_ item: TodoItem) {
-        if storage.isDirty {
-            updateListNetwork { _ in
-                if let dataDelegate = self.dataDelegate {
-                    dataDelegate(self.storage.getItems())
-                }
-            }
-        } else {
-            network.deleteTodoItem(with: item.id) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                    case .success:
-                        self.updateRevision(self.network.getRevision() + 1)
-                        self.storage.isDirty = false
-                    case .failure:
-                        self.storage.isDirty = true
-                }
-                
-                if let dataDelegate = self.dataDelegate {
-                    dataDelegate(self.storage.getItems())
-                }
-            }
-        }
+//        if storage.isDirty {
+        storage.markeredToDeleteItems[item.id] = 1
+        makeSynchronization()
+//        } else {
+//            patchListNetwork(self.storage.getList()) { result in
+//                switch result {
+//                case .success(let (mergedServerItems, mergedServerRevision)):
+//                    self.network.updateRevision(mergedServerRevision)
+//                    self.storage.setList(mergedServerItems)
+//                    self.saveListLocally()
+//                    self.storage.isDirty = false
+//                    self.sendChanges()
+//                case .failure:
+//                    self.storage.isDirty = true
+//                    self.sendChanges()
+//                }
+//            }
+//        }
     }
     
     func updateElementNetwork(_ item: TodoItem) {
-        if storage.isDirty {
-            updateListNetwork { _ in
-                if let dataDelegate = self.dataDelegate {
-                    dataDelegate(self.storage.getItems())
-                }
-            }
-        } else {
-            network.updateTodoItem(with: item.id, item: item) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                    case .success:
-                        self.updateRevision(self.network.getRevision() + 1)
-                        self.storage.isDirty = false
-                    case .failure:
-                        self.storage.isDirty = true
-                }
-                
-                if let dataDelegate = self.dataDelegate {
-                    dataDelegate(self.storage.getItems())
-                }
-            }
-        }
+        storage.markeredToUpdateItems[item.id] = 1
+        makeSynchronization()
     }
     
     func checkElementNetwork(_ id: String, completion: @escaping (Result<TodoItem, Error>) -> Void) {
@@ -154,12 +150,6 @@ class DataManagerImp: DataManager {
                     completion(.failure(error))
             }
         }
-    }
-    
-    func addElementLocally(_ item: TodoItem) -> [TodoItem] {
-        storage.add(item)
-        try? storage.save(to: mainDataBaseFileName)
-        return storage.getItems()
     }
     
     func updateNetworkToken(_ token: String?) {
@@ -174,14 +164,22 @@ class DataManagerImp: DataManager {
         return storage.isDirty
     }
     
-    func checkToken(_ clouser: @escaping ((Bool) -> Void)) {
+    func checkToken(_ completion: @escaping ((Bool) -> Void)) {
         network.checkToken { result in
             switch result {
             case .success:
-                clouser(true)
+                completion(true)
             case .failure:
-                clouser(false)
+                completion(false)
             }
+        }
+    }
+    
+    // MARK: - Private methods
+
+    private func sendChanges() {
+        if let dataDelegate = dataDelegate {
+            dataDelegate(storage.getList())
         }
     }
 }

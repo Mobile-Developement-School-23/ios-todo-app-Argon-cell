@@ -1,0 +1,71 @@
+name: ToDoList
+
+## options section ##
+
+options:
+  bundleIdPrefix: com.definex.ToDoList
+  xcodeVersion: '14.3.1'
+  deploymentTarget: '15.0'
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  findCarthageFrameworks: true
+  minimumXcodeGenVersion: '2.18.0'
+  postGenCommand: pod install
+#
+#post_gen:
+#  - name: Install Pods
+#    script: |
+#      cd ./
+#      pod install
+
+## configs section ##
+
+configs:
+  Debug: debug
+  Release: release
+
+## packages section ##
+
+packages:
+  SQLite:
+    url: https://github.com/stephencelis/SQLite.swift
+    majorVersion: 0.9.2
+  
+## targets section ##
+
+targets:
+  ToDoList:
+    type: application
+    platform: iOS
+    deploymentTarget: 15.0
+    settings:
+      base:
+        MARKETING_VERSION: 1.0
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_FILE: ToDoList/SupportingFiles/ToDoList-Info.plist
+        GENERATE_INFOPLIST_FILE: Yes
+    sources:
+       - path: ./ToDoList
+    scheme:
+      testTargets:
+        - ToDoListTests
+    dependencies:
+      - package: SQLite 
+        product: SQLite
+    postCompileScripts:
+      - script: |
+            if [[ -f "${PODS_ROOT}/SwiftLint/swiftlint" ]]; then
+              "${PODS_ROOT}/SwiftLint/swiftlint"
+            else
+              echo "SwiftLint не установлен, пожалуйста, пропишите pod install в консоли"
+            fi
+        name: SwiftLint
+        basedOnDependencyAnalysis: false
+  ToDoListTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+       - path: ./ToDoListTests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: Yes

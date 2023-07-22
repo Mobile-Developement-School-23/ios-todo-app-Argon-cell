@@ -1,8 +1,9 @@
 import Foundation
 // import UIKit
 
+
 // MARK: - Struct
-public struct TodoItem: Equatable, Hashable {
+struct TodoItem: Equatable, Hashable, Identifiable {
     let id: String
     var text: String
     var importance: Importance

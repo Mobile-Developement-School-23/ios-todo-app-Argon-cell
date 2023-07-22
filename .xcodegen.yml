@@ -11,12 +11,6 @@ options:
   findCarthageFrameworks: true
   minimumXcodeGenVersion: '2.18.0'
   postGenCommand: pod install
-#
-#post_gen:
-#  - name: Install Pods
-#    script: |
-#      cd ./
-#      pod install
 
 ## configs section ##
 
@@ -61,11 +55,32 @@ targets:
             fi
         name: SwiftLint
         basedOnDependencyAnalysis: false
+        
   ToDoListTests:
     type: bundle.unit-test
     platform: iOS
+    deploymentTarget: 15.0
     sources:
        - path: ./ToDoListTests
     settings:
       base:
         GENERATE_INFOPLIST_FILE: Yes
+        MARKETING_VERSION: 1.0
+        CURRENT_PROJECT_VERSION: 1
+        
+  TodoListSwiftUI:
+    type: application
+    platform: iOS
+    deploymentTarget: 15.0
+    sources:
+       - path: ./TodoListSwiftUI
+       - path: ./ToDoList/Models
+       - path: ./ToDoList/Extensions
+       - path: ./ToDoList/SupportingFiles/Fonts
+       - path: ./ToDoList/SupportingFiles/Assets.xcassets
+    settings:
+      base:
+        INFOPLIST_FILE: ToDoList/SupportingFiles/ToDoList-Info.plist
+        GENERATE_INFOPLIST_FILE: Yes
+        MARKETING_VERSION: 1.0
+        CURRENT_PROJECT_VERSION: 1

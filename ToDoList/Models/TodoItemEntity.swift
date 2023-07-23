@@ -1,11 +1,3 @@
-//
-//  TodoItemEntity+CoreDataProperties.swift
-//  
-//
-//  Created by Ильгам Нафиков on 12.07.2023.
-//
-//
-
 import Foundation
 import CoreData
 
